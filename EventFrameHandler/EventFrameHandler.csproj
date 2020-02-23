@@ -213,6 +213,25 @@
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\_bootstrap-datetimepicker.less" />
+    <Content Include="Content\bootstrap-datetimepicker-build.less" />
+    <EntityDeploy Include="Models\MOMSEventFrameInterface.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>MOMSEventFrameInterface.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\MOMSEventFrameInterface.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MOMSEventFrameInterface.edmx</DependentUpon>
+      <LastGenOutput>MOMSEventFrameInterface.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\MOMSEventFrameInterface.edmx.diagram">
+      <DependentUpon>MOMSEventFrameInterface.edmx</DependentUpon>
+    </Content>
+    <Content Include="Models\MOMSEventFrameInterface.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>MOMSEventFrameInterface.edmx</DependentUpon>
+      <LastGenOutput>MOMSEventFrameInterface.cs</LastGenOutput>
+    </Content>
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.ttf" />
@@ -288,25 +307,6 @@
     <Content Include="Content\bootstrap\bootstrap.less" />
     <Content Include="Content\bootstrap\badges.less" />
     <Content Include="Content\bootstrap\alerts.less" />
-    <Content Include="Content\_bootstrap-datetimepicker.less" />
-    <Content Include="Content\bootstrap-datetimepicker-build.less" />
-    <EntityDeploy Include="Models\MOMSEventFrameInterface.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>MOMSEventFrameInterface.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\MOMSEventFrameInterface.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>MOMSEventFrameInterface.edmx</DependentUpon>
-      <LastGenOutput>MOMSEventFrameInterface.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\MOMSEventFrameInterface.edmx.diagram">
-      <DependentUpon>MOMSEventFrameInterface.edmx</DependentUpon>
-    </Content>
-    <Content Include="Models\MOMSEventFrameInterface.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>MOMSEventFrameInterface.edmx</DependentUpon>
-      <LastGenOutput>MOMSEventFrameInterface.cs</LastGenOutput>
-    </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.js" />
     <Content Include="Scripts\i18n\jquery-ui-timepicker-addon-i18n.min.js" />
