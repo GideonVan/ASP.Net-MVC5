@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MOMSEventFrameInterfaceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_factFailureDowntimeCMMS">
+          <Key>
+            <PropertyRef Name="UniqueID" />
+          </Key>
+          <Property Name="UniqueID" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="StartTime" Type="datetime2" Precision="7" />
+          <Property Name="EndTime" Type="datetime2" Precision="7" />
+          <Property Name="Duration" Type="nvarchar" MaxLength="255" />
+          <Property Name="Equipment" Type="nvarchar" MaxLength="255" />
+          <Property Name="Equipment Number" Type="nvarchar" MaxLength="255" />
+          <Property Name="Site" Type="nvarchar" MaxLength="255" />
+          <Property Name="Site Area" Type="nvarchar" MaxLength="255" />
+          <Property Name="Site Section" Type="nvarchar" MaxLength="255" />
+          <Property Name="Equipment Type" Type="nvarchar" MaxLength="255" />
+          <Property Name="ElementID" Type="varchar" MaxLength="255" />
+          <Property Name="IsEscalated" Type="bit" />
+        </EntityType>
+        <EntityContainer Name="MOMSEventFrameInterfaceModelStoreContainer">
+          <EntitySet Name="tbl_factFailureDowntimeCMMS" EntityType="Self.tbl_factFailureDowntimeCMMS" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MOMSEventFrameInterfaceModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_factFailureDowntimeCMMS">
+          <Key>
+            <PropertyRef Name="UniqueID" />
+          </Key>
+          <Property Name="UniqueID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="StartTime" Type="DateTime" Precision="7" />
+          <Property Name="EndTime" Type="DateTime" Precision="7" />
+          <Property Name="Duration" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Equipment" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Equipment_Number" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Site" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Site_Area" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Site_Section" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Equipment_Type" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ElementID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="IsEscalated" Type="Boolean" />
+        </EntityType>
+        <EntityContainer Name="MOMSEventFrameInterfaceEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_factFailureDowntimeCMMS" EntityType="Self.tbl_factFailureDowntimeCMMS" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MOMSEventFrameInterfaceModelStoreContainer" CdmEntityContainer="MOMSEventFrameInterfaceEntities">
+          <EntitySetMapping Name="tbl_factFailureDowntimeCMMS">
+            <EntityTypeMapping TypeName="MOMSEventFrameInterfaceModel.tbl_factFailureDowntimeCMMS">
+              <MappingFragment StoreEntitySet="tbl_factFailureDowntimeCMMS">
+                <ScalarProperty Name="UniqueID" ColumnName="UniqueID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Equipment" ColumnName="Equipment" />
+                <ScalarProperty Name="Equipment_Number" ColumnName="Equipment Number" />
+                <ScalarProperty Name="Site" ColumnName="Site" />
+                <ScalarProperty Name="Site_Area" ColumnName="Site Area" />
+                <ScalarProperty Name="Site_Section" ColumnName="Site Section" />
+                <ScalarProperty Name="Equipment_Type" ColumnName="Equipment Type" />
+                <ScalarProperty Name="ElementID" ColumnName="ElementID" />
+                <ScalarProperty Name="IsEscalated" ColumnName="IsEscalated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

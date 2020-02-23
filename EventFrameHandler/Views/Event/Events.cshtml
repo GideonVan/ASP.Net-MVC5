@@ -1,0 +1,344 @@
+﻿@model EventFrameHandler.Models.DowntimeModelView
+@{
+    ViewBag.Title = "Events";
+    //Layout = null;
+}
+
+<h2>New Events</h2>
+
+@*
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+        <script src="~/Scripts/bootstrap.js"></script>*@
+
+@*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>*@
+
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+
+<script src="~/Scripts/moment.js"></script>
+
+<link href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="//cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" rel="stylesheet" />
+<script src="//cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+
+@*<link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>*@
+
+
+@*Event Filters*@
+@*<div type="container-fluid">
+    <label for="site">@Html.DropDownListFor(x => x.Site, ViewBag.SiteList as SelectList, "--Select Site--", new { @id = "siteList", @class = "form-control" })</label>
+
+    <label for="from">From</label>
+    <input type="text" id="from" name="from" onkeydown="return false">
+
+    <label for="to">To</label>
+    <input type="text" id="to" name="to" onkeydown="return false">
+
+    <button class="btn btn-success" id="filter" onclick="GetEventsFiltered()">Apply Filter</button>
+</div>*@
+
+
+@*This is the table of data for new events*@
+<div class="container-fluid text-nowrap" id="NewEventsContainer "style="width:auto">
+    <table id="NewEvents" class="table table-striped table-bordered table-responsive text-nowrap" style="width:auto">
+        <thead>
+            <tr>
+                @*<th>UniqueID</th>*@
+                <th>Equipment</th>
+                <th>Equipment Number</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Duration</th>
+                <th>Site</th>
+                <th>Self Annotate</th>
+                <th>Create Work Order</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                @*<th>UniqueID</th>*@
+                <th>Equipment</th>
+                <th>Equipment Number</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Duration</th>
+                <th>Site</th>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+@*Self annotation/Create Work Order window*@
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class=" = modal-content">
+
+            <div class="modal-header">
+
+                <h3 class="modal-title">Self Annotate</h3>
+                <a href="#" class="close" data-dismiss="modal">&times;</a>
+
+            </div>
+
+            <div class="modal-body" id="myModalBodyDiv">
+                I am Modal
+            </div>
+
+            <div class="modal-footer">
+
+                <a href="#" class="btn btn-default" data-dismiss="modal">Cancel</a>
+                @*<a href="#" class="btn btn-success" onclick="">Confirm</a>*@
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+
+@section scripts {
+
+    @*scripts for Modal window*@
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    
+    <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    @*<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>*@
+    <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            //debugger
+
+            // Setup JQuery UI date picker format to dd/mm/yy
+            $.datepicker.regional[""].dateFormat = 'dd/mm/yy';
+            $.datepicker.setDefaults($.datepicker.regional['']);
+
+            //Datatable for new events
+            var NewEventsTable = $("#NewEvents").DataTable({
+
+                "ajax": {
+                    "type": "GET",
+                    "url": "/Event/GetEvents",
+                    "datatype": "json",
+                    "bServerSide": true,
+                    //"sAjaxSource": "/Events/GetEvents",
+                    //"sAjaxSource": "/Events/AjaxHandler",
+                    "bProcessing": true,
+                    "bFilter": true,
+                },
+
+                "rowId": function (a) {
+                    return a.UniqueID;
+                },
+
+                "responsive": true,
+
+                "autoWidth": false,
+
+                "scrollX": false,
+
+                "columnDefs": [
+
+                ],
+
+                "columns": [
+                    //{ "data": "UniqueID" },
+                    { "data": "Equipment" },
+                    { "data": "Equipment_Number" },
+                    {
+                        "data": "StartTime", "render": function (data) {
+                            if (data === null) return "";
+                            var dt = moment(data).format("YYYY/MM/DD HH:mm:ss"); //json string
+                            return dt;
+
+                            //var dt = new Date(parseFloat(results[1]));
+                            //var pattern = /Date\(([^)]+)\)/;
+                            //var results = pattern.exec(data);
+
+                            //return dt.getFullYear() + "/" + "0" + (dt.getMonth() + 1) + "/" + dt.getDate() + " " + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+
+                            //if (dt.getMonth().toString().length == 1) {
+                            //    return dt.getFullYear() + "/" + "0" + (dt.getMonth() + 1) + "/" + dt.getDate() + " " + dt.getHours() + ":" + dt.getMinutes().toPrecision(2) + ":" + dt.getSeconds().toPrecision(2);
+                            //}
+                            //return dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
+                            //return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear();
+                        }
+                    },
+                    {
+                        "data": "EndTime", "render": function (data) {
+                            if (data === null) return "";
+                            var dt = moment(data).format("YYYY/MM/DD HH:mm:ss"); //json string
+                            return dt;
+                        }
+                    },
+                    { "data": "Duration" },
+                    { "data": "Site" },
+                    {
+                        "mData": null,
+                        "bSortable": false,
+                        "mRender": function (data, type, full) {
+                            //return '<a class="btn btn-info btn-sm" id="SelfAnnotate" href=#' + full[0] + '>' + 'Self Annotate' + '</a>';
+                            return '<a class="glyphicon glyphicon-pencil" id="SelfAnnotate" href=#></a>';
+                        }
+                    },
+
+                    {
+                        "mData": null,
+                        "bSortable": false,
+                        "mRender": function (data, type, full) {
+                            return '<a class="glyphicon glyphicon-wrench" id="CreateWorkOrder" href=#></a>';
+                        }
+                    }
+                ],
+
+                //Remove default search datatables using DOM positioning
+                "dom": '<"top"l>rt<"bottom"ip><"clear">',
+
+                //Add serach control
+                "fnInitComplete": function (oSettings, json) {
+                    addSearchControl(json)
+                }
+            });
+
+            // Setup - add a text input to each footer cell -NOT WORKING YET
+            function addSearchControl(json) {
+                $('#NewEvents tfoot th').each(function () {
+                    var title = $(this).text();
+                    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                    //$('#NewEvents tfoot th').appendTo('#NewEvents thead');
+
+                    // Apply the search
+                    NewEventsTable.columns().every(function () {
+                        var that = this;
+
+                        $('input', this.footer()).on('keyup change clear', function () {
+                            if (that.search() !== this.value) {
+                                that
+                                    .search(this.value)
+                                    .draw();
+                            }
+                        });
+                    });
+
+                });
+            }
+
+             var table = $("#NewEvents").DataTable();
+            //Listener for when self annotation is clicked
+            $('body').on('click', '#SelfAnnotate', function () {
+                var row = $(this).parents('tr')[0];
+                var id = table.row(row).id();
+                alert(id);
+                var url = "/Event/"
+
+                $("#myModalBodyDiv").load(url, function () {
+                    $("#myModal").modal("show");
+                })   
+            });
+
+            //Listener for when create workorder is clicked
+            $('body').on('click', '#CreateWorkOrder', function () {
+                var row = $(this).parents('tr')[0];
+                var id = table.row(row).id();
+                alert(id);
+                $("#myModal").modal("show");
+            });
+
+
+            //Adjust container for new events
+            $('#NewEventsContainer').css( 'display', 'block' );
+                table.columns.adjust().draw();
+
+        });
+ 
+    </script>
+
+
+    @*When site selection is made the event trigger filters the datatable (general filter)*@
+    <script>
+
+        $('#siteList').on("change", function () {
+            var fromSelection = $('#from option:selected').text();
+            var siteSelection = $('#siteList option:selected').text();
+            $('#NewEvents').DataTable().search(siteSelection, false, true).draw();
+        });
+    </script>
+
+    @*Date picker*@
+    <script>
+        $(document).ready(function () {
+
+            var dateFormat = "dd/mm/yy",
+                from = $("#from")
+                    .datepicker({
+                        defaultDate: "+1w",
+                        maxDate: "getDate",
+                        changeMonth: true,
+                        changeYear: true,
+                        numberOfMonths: 1
+                    })
+                    .on("change", function () {
+                        to.datepicker("option", "minDate", getDate(this));
+                    }),
+                to = $("#to").datepicker({
+                    defaultDate: "+1w",
+                    maxDate: "getDate",
+                    changeMonth: true,
+                    changeYear: true,
+                    numberOfMonths: 1
+                })
+                    .on("change", function () {
+                        from.datepicker("option", "maxDate", getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datetimepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+            }
+        });
+    </script>
+
+    @*<script>
+            var GetEventsFiltered = function () {
+                var sTime = $("#from").val();
+                var eTime = $("#to").val();
+                var site = $("#siteList").val();
+
+                $("#NewEvents").select()
+
+
+
+            }
+        </script>*@
+
+}
+
+
+
+
+
+
+
