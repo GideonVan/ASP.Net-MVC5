@@ -1,0 +1,9 @@
+﻿
+@*<option value="">--Equipment Name--</option>*@
+@if (ViewBag.equipmentNameList != null)
+{
+    foreach (var item in ViewBag.equipmentNameList)
+    {
+        <option value="@item.Value">@item.Text</option>
+    }
+}

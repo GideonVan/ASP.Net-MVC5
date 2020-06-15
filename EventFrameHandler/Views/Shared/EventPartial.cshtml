@@ -1,0 +1,151 @@
+﻿@model EventFrameHandler.Models.Event_Equipment_RootCauseModelView
+
+@*@{
+        ViewBag.Title = "SetAnnotation";
+    }*@
+
+<body style='margin:30px'>
+    <div class="container">
+        <!-- Horizonatal Form -->
+        <div class="row">
+            <div class="col-xs-6">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <h4>Registered Equipment Downtime</h4>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="site" class="col-xs-2">Site</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.site, new { @class = "form-control", @placeholder = "Site", @readonly = true, @id = "site" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipment" class="col-xs-2">Equipment</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.equipmentName, new { @class = "form-control", @placeholder = "Equipment", @readonly = true, @id = "equipment" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipmentNumber" class="col-xs-2">Equipment Number</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.equipmentNumber, new { @class = "form-control", @placeholder = "Equipment Number", @readonly = true, @id = "equipmentNumber" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startTime" class="col-xs-2">Start Time</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.startTime, new { @class = "form-control", @placeholder = "Start Time", @readonly = true, @id = "startTime" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endTime" class="col-xs-2">End Time</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.endTime, new { @class = "form-control", @placeholder = "End Time", @readonly = true, @id = "endTime" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration" class="col-xs-2">Duration</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.duration, new { @class = "form-control", @placeholder = "Duration", @readonly = true, @id = "duration" })
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+@*Lists for the Self Annotation and Create Work Order*@
+<body style='margin:30px'>
+    <div class="container">
+        <!-- Horizonatal Form -->
+        <div class="row">
+            <div class="col-xs-6">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <h4>Equipment Downtime Annotation</h4>
+                    </div>
+                    <div class="form-group">
+                        <label for="equipTypeList" class="col-xs-2">Equipment Type</label>
+                        <div class="col-xs-6">
+                            @if (ViewBag.equipTypeList != null)
+                            {
+                                @Html.DropDownListFor(model => model.equipModelView.equipType, ViewBag.equipTypeList as SelectList, "--Select Equipment Type--", new { @class = "form-control", @id = "equipTypeList" })
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipNumList" class="col-xs-2">Equipment Number</label>
+                        <div class="col-xs-6">
+                            @Html.DropDownListFor(model => model.equipModelView.equipNumber, new SelectList(""), "--Select Equipment Number--", new { @class = "form-control", @id = "equipNumList" })
+                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipNameList" class="col-xs-2">Equipment Name</label>
+                        <div class="col-xs-6">
+                            @Html.DropDownListFor(model => model.equipModelView.equipName, new SelectList(""), "--Equipment Number--", new { @class = "form-control", @id = "equipNameList"})
+                        </div>
+                    </div>
+
+                        @*<div class="form-group">
+                            <label for="duration" class="col-xs-2">Duration</label>
+                            <div class="col-xs-6">
+                                @Html.DropDownListFor(x => x.Site, ViewBag.SiteList as SelectList, "--Select Site--", new { @id = "siteList", @class = "form-control" })
+                            </div>
+                        </div>
+
+                    <div class="col-xs-10 col-xs-offset-2">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>*@
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+@*<script type="text/javascript">*@
+<script>
+    $(document).ready(function () {
+        $("#equipTypeList").change(function () {
+            var equipType = $(this).find("option:selected").text();
+            //debugger
+
+            $.ajax({
+                type: "Post",
+                url: "/Event/GetEquipmentNumberList?EquipmentType=" + equipType,
+                contentType: "html",
+                success: function (response) {
+                    $("#equipNumList").empty();
+                    $("#equipNumList").append(response);
+                }
+            })
+        })
+
+        $("#equipNumList").change(function () {
+            var equipNum = $(this).find("option:selected").text();
+            //debugger
+
+            $.ajax({
+                type: "Post",
+                url: "/Event/GetEquipmentNameList?EquipmentNumber=" + equipNum,
+                contentType: "html",
+                success: function (response) {
+                    //debugger
+                    $("#equipNameList").empty();
+                    $("#equipNameList").append(response);
+                    //debugger
+                }
+            })
+        })
+    })
+</script>

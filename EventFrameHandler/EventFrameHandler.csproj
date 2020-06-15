@@ -133,7 +133,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\DowntimeModelView.cs" />
+    <Compile Include="Models\Event_Equipment_RootCauseModelView.cs" />
+    <Compile Include="Models\EquipmentModelView.cs" />
+    <Compile Include="Models\EventModelView.cs" />
     <Compile Include="Models\MOMSEventFrameInterface.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -148,6 +150,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MOMSEventFrameInterface.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RootCauseModelView.cs" />
+    <Compile Include="Models\tbl_DimNonWorkOrderDowntimeAnnnotations.cs">
+      <DependentUpon>MOMSEventFrameInterface.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_DimSiteEquipment.cs">
+      <DependentUpon>MOMSEventFrameInterface.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tbl_factFailureDowntimeCMMS.cs">
       <DependentUpon>MOMSEventFrameInterface.tt</DependentUpon>
@@ -388,7 +397,9 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Event\Events.cshtml" />
-    <Content Include="Views\Event\EventPartial.cshtml" />
+    <Content Include="Views\Shared\EventPartial.cshtml" />
+    <Content Include="Views\Shared\EquipmentNumberPartial.cshtml" />
+    <Content Include="Views\Shared\EquipmentNamePartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

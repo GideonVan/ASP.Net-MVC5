@@ -89,25 +89,83 @@ namespace EventFrameHandler.Controllers
     public class EventController : Controller
     {
         // GET: Event
-       public ActionResult Events()
+        public ActionResult Events()
         {
-            MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities();
+            //MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities();
 
-            var siteList = db.tbl_factFailureDowntimeCMMS.Select(x => new DowntimeModelView { Site = x.Site }).Distinct().ToList();
+            //var siteList = db.tbl_factFailureDowntimeCMMS.Select(x => new EventModelView { Site = x.Site }).Distinct().ToList();
 
-            ViewBag.SiteList = new SelectList(siteList, "", "Site");
+            //ViewBag.SiteList = new SelectList(siteList, "", "Site");
 
             return View();
         }
 
         [HttpGet]
-        public ActionResult GetEvents()
+        public ActionResult GetEvents() //All the events which have not been escalated
         {
             using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
             {
-                List<DowntimeModelView> dtList = db.tbl_factFailureDowntimeCMMS.Where(x => x.IsEscalated == false).OrderByDescending(x=>x.StartTime).Select(x => new DowntimeModelView { Equipment = x.Equipment, StartTime = x.StartTime, EndTime = x.EndTime, Duration = x.Duration, Equipment_Number = x.Equipment_Number, Site = x.Site, UniqueID = x.UniqueID }).ToList();
+                List<EventModelView> dtList = db.tbl_factFailureDowntimeCMMS.Where(x => x.IsEscalated == false).OrderByDescending(x=>x.StartTime).Select(x => new EventModelView { equipmentName = x.EquipmentName, startTime = x.StartTime, endTime = x.EndTime, duration = x.Duration, equipmentNumber = x.EquipmentNumber,site = x.Site, uniqueID = x.UniqueID }).ToList();
 
                 return Json(new { data = dtList }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        public ActionResult SetEscalation (string EventID, string Site) { 
+            
+            using(MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
+            { 
+                Event_Equipment_RootCauseModelView dtEventModel = new Event_Equipment_RootCauseModelView();
+
+                ViewBag.equipTypeList = new SelectList(GetEquipmentTypeList(Site), "equipNumber", "equipType");
+
+                dtEventModel.eventModelView = new EventModelView();
+
+                tbl_factFailureDowntimeCMMS dtEvent = db.tbl_factFailureDowntimeCMMS.SingleOrDefault(x => x.UniqueID == EventID);
+
+                dtEventModel.eventModelView.uniqueID = dtEvent.UniqueID;
+                dtEventModel.eventModelView.equipmentName = dtEvent.EquipmentName;
+                dtEventModel.eventModelView.equipmentNumber = dtEvent.EquipmentNumber;
+                dtEventModel.eventModelView.startTime = dtEvent.StartTime;
+                dtEventModel.eventModelView.endTime = dtEvent.EndTime;
+                dtEventModel.eventModelView.duration = dtEvent.Duration;
+                dtEventModel.eventModelView.site = dtEvent.Site;
+
+                return PartialView("EventPartial", dtEventModel);
+            }
+        }
+
+        public List<EquipmentModelView> GetEquipmentTypeList (string Site)
+        {
+            using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
+            {
+                List<EquipmentModelView> equipType = db.tbl_DimSiteEquipment.Where(x => x.Site == Site).Select(x => new EquipmentModelView { equipType = x.EquipmentType }).Distinct().ToList();
+
+                return equipType;
+            }
+        }
+
+        public ActionResult GetEquipmentNumberList(string EquipmentType)
+        {
+            using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
+            {
+                List<EquipmentModelView> equipmentNumberList = db.tbl_DimSiteEquipment.Where(x => x.EquipmentType == EquipmentType).Select(x => new EquipmentModelView { equipNumber = x.EquipmentNumber }).Distinct().ToList();
+
+                ViewBag.equipmentNumberList = new SelectList(equipmentNumberList, "equipName","equipNumber");
+
+                return PartialView("EquipmentNumberPartial");
+            }
+        }
+
+        public ActionResult GetEquipmentNameList(string EquipmentNumber)
+        {
+            using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
+            {
+                List<EquipmentModelView> equipmentNameList = db.tbl_DimSiteEquipment.Where(x => x.EquipmentNumber== EquipmentNumber).Select(x => new EquipmentModelView { equipName = x.EquipmentName }).Distinct().ToList();
+
+                ViewBag.equipmentNameList = new SelectList(equipmentNameList, "equipNumber", "equipName");
+
+                return PartialView("EquipmentNamePartial");
             }
         }
 
@@ -130,14 +188,14 @@ namespace EventFrameHandler.Controllers
         //    }
         //}
 
-        public ActionResult GetEventsFiltered(DateTime startTime)
-        {
-            using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
-            {
-                List<DowntimeModelView> dtList = db.tbl_factFailureDowntimeCMMS.Where(x => x.IsEscalated == false && x.StartTime > startTime).Select(x => new DowntimeModelView { Equipment = x.Equipment, StartTime = x.StartTime, EndTime = x.EndTime, Duration = x.Duration, Equipment_Number = x.Equipment_Number, Site = x.Site, UniqueID = x.UniqueID }).ToList();
+        //public ActionResult GetEventsFiltered(DateTime startTime)
+        //{
+        //    using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
+        //    {
+        //        List<DowntimeModelView> dtList = db.tbl_factFailureDowntimeCMMS.Where(x => x.IsEscalated == false && x.StartTime > startTime).Select(x => new DowntimeModelView { Equipment = x.Equipment, StartTime = x.StartTime, EndTime = x.EndTime, Duration = x.Duration, Equipment_Number = x.Equipment_Number, Site = x.Site, UniqueID = x.UniqueID }).ToList();
 
-                return Json( new { data = dtList }, JsonRequestBehavior.AllowGet );
-            }
-        }
+        //        return Json( new { data = dtList }, JsonRequestBehavior.AllowGet );
+        //    }
+        //}
     }
 }

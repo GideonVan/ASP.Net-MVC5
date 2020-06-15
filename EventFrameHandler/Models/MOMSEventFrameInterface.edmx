@@ -5,6 +5,27 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="MOMSEventFrameInterfaceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_DimNonWorkOrderDowntimeAnnnotations">
+          <Key>
+            <PropertyRef Name="CKey" />
+          </Key>
+          <Property Name="Equipment" Type="varchar" MaxLength="255" />
+          <Property Name="Downtime Type" Type="varchar" MaxLength="50" />
+          <Property Name="Root Cause" Type="varchar" MaxLength="50" />
+          <Property Name="CKey" Type="varchar" MaxLength="357" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_DimSiteEquipment">
+          <Key>
+            <PropertyRef Name="ElementID" />
+          </Key>
+          <Property Name="ElementID" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="EquipmentName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="EquipmentNumber" Type="varchar" MaxLength="50" />
+          <Property Name="EquipmentType" Type="varchar" MaxLength="50" />
+          <Property Name="Site" Type="nvarchar" MaxLength="50" />
+          <Property Name="SiteArea" Type="nvarchar" MaxLength="50" />
+          <Property Name="SiteSection" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="tbl_factFailureDowntimeCMMS">
           <Key>
             <PropertyRef Name="UniqueID" />
@@ -14,16 +35,18 @@
           <Property Name="StartTime" Type="datetime2" Precision="7" />
           <Property Name="EndTime" Type="datetime2" Precision="7" />
           <Property Name="Duration" Type="nvarchar" MaxLength="255" />
-          <Property Name="Equipment" Type="nvarchar" MaxLength="255" />
-          <Property Name="Equipment Number" Type="nvarchar" MaxLength="255" />
+          <Property Name="EquipmentName" Type="nvarchar" MaxLength="255" />
+          <Property Name="EquipmentNumber" Type="nvarchar" MaxLength="255" />
           <Property Name="Site" Type="nvarchar" MaxLength="255" />
-          <Property Name="Site Area" Type="nvarchar" MaxLength="255" />
-          <Property Name="Site Section" Type="nvarchar" MaxLength="255" />
-          <Property Name="Equipment Type" Type="nvarchar" MaxLength="255" />
+          <Property Name="SiteArea" Type="nvarchar" MaxLength="255" />
+          <Property Name="SiteSection" Type="nvarchar" MaxLength="255" />
+          <Property Name="EquipmentType" Type="nvarchar" MaxLength="255" />
           <Property Name="ElementID" Type="varchar" MaxLength="255" />
           <Property Name="IsEscalated" Type="bit" />
         </EntityType>
         <EntityContainer Name="MOMSEventFrameInterfaceModelStoreContainer">
+          <EntitySet Name="tbl_DimNonWorkOrderDowntimeAnnnotations" EntityType="Self.tbl_DimNonWorkOrderDowntimeAnnnotations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_DimSiteEquipment" EntityType="Self.tbl_DimSiteEquipment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_factFailureDowntimeCMMS" EntityType="Self.tbl_factFailureDowntimeCMMS" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -39,18 +62,41 @@
           <Property Name="StartTime" Type="DateTime" Precision="7" />
           <Property Name="EndTime" Type="DateTime" Precision="7" />
           <Property Name="Duration" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Equipment" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Equipment_Number" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Site" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Site_Area" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Site_Section" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Equipment_Type" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="ElementID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="IsEscalated" Type="Boolean" />
+          <Property Name="EquipmentName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EquipmentNumber" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SiteArea" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SiteSection" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EquipmentType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityContainer Name="MOMSEventFrameInterfaceEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="tbl_factFailureDowntimeCMMS" EntityType="Self.tbl_factFailureDowntimeCMMS" />
+          <EntitySet Name="tbl_DimNonWorkOrderDowntimeAnnnotations" EntityType="MOMSEventFrameInterfaceModel.tbl_DimNonWorkOrderDowntimeAnnnotations" />
+          <EntitySet Name="tbl_DimSiteEquipment" EntityType="MOMSEventFrameInterfaceModel.tbl_DimSiteEquipment" />
         </EntityContainer>
+        <EntityType Name="tbl_DimNonWorkOrderDowntimeAnnnotations">
+          <Key>
+            <PropertyRef Name="CKey" />
+          </Key>
+          <Property Name="Equipment" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Downtime_Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Root_Cause" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CKey" Type="String" Nullable="false" MaxLength="357" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="tbl_DimSiteEquipment">
+          <Key>
+            <PropertyRef Name="ElementID" />
+          </Key>
+          <Property Name="ElementID" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="EquipmentName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="EquipmentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EquipmentType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Site" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SiteArea" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SiteSection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -60,19 +106,42 @@
           <EntitySetMapping Name="tbl_factFailureDowntimeCMMS">
             <EntityTypeMapping TypeName="MOMSEventFrameInterfaceModel.tbl_factFailureDowntimeCMMS">
               <MappingFragment StoreEntitySet="tbl_factFailureDowntimeCMMS">
+                <ScalarProperty Name="EquipmentType" ColumnName="EquipmentType" />
+                <ScalarProperty Name="SiteSection" ColumnName="SiteSection" />
+                <ScalarProperty Name="SiteArea" ColumnName="SiteArea" />
+                <ScalarProperty Name="EquipmentNumber" ColumnName="EquipmentNumber" />
+                <ScalarProperty Name="EquipmentName" ColumnName="EquipmentName" />
                 <ScalarProperty Name="UniqueID" ColumnName="UniqueID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />
                 <ScalarProperty Name="Duration" ColumnName="Duration" />
-                <ScalarProperty Name="Equipment" ColumnName="Equipment" />
-                <ScalarProperty Name="Equipment_Number" ColumnName="Equipment Number" />
                 <ScalarProperty Name="Site" ColumnName="Site" />
-                <ScalarProperty Name="Site_Area" ColumnName="Site Area" />
-                <ScalarProperty Name="Site_Section" ColumnName="Site Section" />
-                <ScalarProperty Name="Equipment_Type" ColumnName="Equipment Type" />
                 <ScalarProperty Name="ElementID" ColumnName="ElementID" />
                 <ScalarProperty Name="IsEscalated" ColumnName="IsEscalated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_DimNonWorkOrderDowntimeAnnnotations">
+            <EntityTypeMapping TypeName="MOMSEventFrameInterfaceModel.tbl_DimNonWorkOrderDowntimeAnnnotations">
+              <MappingFragment StoreEntitySet="tbl_DimNonWorkOrderDowntimeAnnnotations">
+                <ScalarProperty Name="CKey" ColumnName="CKey" />
+                <ScalarProperty Name="Root_Cause" ColumnName="Root Cause" />
+                <ScalarProperty Name="Downtime_Type" ColumnName="Downtime Type" />
+                <ScalarProperty Name="Equipment" ColumnName="Equipment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_DimSiteEquipment">
+            <EntityTypeMapping TypeName="MOMSEventFrameInterfaceModel.tbl_DimSiteEquipment">
+              <MappingFragment StoreEntitySet="tbl_DimSiteEquipment">
+                <ScalarProperty Name="SiteSection" ColumnName="SiteSection" />
+                <ScalarProperty Name="SiteArea" ColumnName="SiteArea" />
+                <ScalarProperty Name="Site" ColumnName="Site" />
+                <ScalarProperty Name="EquipmentType" ColumnName="EquipmentType" />
+                <ScalarProperty Name="EquipmentNumber" ColumnName="EquipmentNumber" />
+                <ScalarProperty Name="EquipmentName" ColumnName="EquipmentName" />
+                <ScalarProperty Name="ElementID" ColumnName="ElementID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

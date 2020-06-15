@@ -12,20 +12,14 @@ namespace EventFrameHandler.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tbl_factFailureDowntimeCMMS
+    public partial class tbl_DimSiteEquipment
     {
-        public string UniqueID { get; set; }
-        public string Name { get; set; }
-        public Nullable<System.DateTime> StartTime { get; set; }
-        public Nullable<System.DateTime> EndTime { get; set; }
-        public string Duration { get; set; }
-        public string Site { get; set; }
         public string ElementID { get; set; }
-        public Nullable<bool> IsEscalated { get; set; }
         public string EquipmentName { get; set; }
         public string EquipmentNumber { get; set; }
+        public string EquipmentType { get; set; }
+        public string Site { get; set; }
         public string SiteArea { get; set; }
         public string SiteSection { get; set; }
-        public string EquipmentType { get; set; }
     }
 }
