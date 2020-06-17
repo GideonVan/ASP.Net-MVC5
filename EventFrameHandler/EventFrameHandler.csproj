@@ -397,9 +397,12 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Event\Events.cshtml" />
-    <Content Include="Views\Shared\EventPartial.cshtml" />
+    <Content Include="Views\Shared\AnnotationFirstResponderPartial.cshtml" />
     <Content Include="Views\Shared\EquipmentNumberPartial.cshtml" />
     <Content Include="Views\Shared\EquipmentNamePartial.cshtml" />
+    <Content Include="Views\Shared\ContDowntimeTypePartial.cshtml" />
+    <Content Include="Views\Shared\ContDowntimeRootCausePartial.cshtml" />
+    <Content Include="Views\Shared\AnnotationWorkOrderPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

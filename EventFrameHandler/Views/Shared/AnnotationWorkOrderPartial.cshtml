@@ -86,26 +86,40 @@
                         <label for="equipNumList" class="col-xs-2">Equipment Number</label>
                         <div class="col-xs-6">
                             @Html.DropDownListFor(model => model.equipModelView.equipNumber, new SelectList(""), "--Select Equipment Number--", new { @class = "form-control", @id = "equipNumList" })
-                         </div>
+                        </div>
                     </div>
 
                     <div class="form-group">
                         <label for="equipNameList" class="col-xs-2">Equipment Name</label>
                         <div class="col-xs-6">
-                            @Html.DropDownListFor(model => model.equipModelView.equipName, new SelectList(""), "--Equipment Number--", new { @class = "form-control", @id = "equipNameList"})
+                            @Html.DropDownListFor(model => model.equipModelView.equipName, new SelectList(""), "--Equipment Name--", new { @class = "form-control", @id = "equipNameList" })
                         </div>
                     </div>
 
-                        @*<div class="form-group">
-                            <label for="duration" class="col-xs-2">Duration</label>
-                            <div class="col-xs-6">
-                                @Html.DropDownListFor(x => x.Site, ViewBag.SiteList as SelectList, "--Select Site--", new { @id = "siteList", @class = "form-control" })
-                            </div>
+                    @*<div class="form-group">
+                        <label for="contCategoryList" class="col-xs-2">Downtime Category</label>
+                        <div class="col-xs-6">
+                            @Html.DropDownListFor(model => model.rootCauseModelView.contCategory, new SelectList(""), "--Select Downtime Category--", new { @class = "form-control", @id = "contCategoryList" })
                         </div>
+                    </div>
 
-                    <div class="col-xs-10 col-xs-offset-2">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>*@
+                    <div class="form-group">
+                        <label for="contDowntimeTypeList" class="col-xs-2">Downtime Type</label>
+                        <div class="col-xs-6">
+                            @Html.DropDownListFor(model => model.rootCauseModelView.contType, new SelectList(""), "--Select Downtime Type--", new { @class = "form-control", @id = "contDowntimeTypeList" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contDowntimeRootCauseList" class="col-xs-2">Root Cause</label>
+                        <div class="col-xs-6">
+                            @Html.DropDownListFor(model => model.rootCauseModelView.contRootCause, new SelectList(""), "--Select Downtime Root Cause--", new { @class = "form-control", @id = "contDowntimeRootCauseList" })
+                        </div>
+                    </div>*@
+
+                    @*<div class="col-xs-10 col-xs-offset-2">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>*@
 
                 </form>
             </div>
@@ -117,6 +131,8 @@
 <script>
     $(document).ready(function () {
         $("#equipTypeList").change(function () {
+            $("#equipNumList").empty();
+            $("#equipNameList").empty();
             var equipType = $(this).find("option:selected").text();
             //debugger
 
@@ -147,5 +163,58 @@
                 }
             })
         })
+
+        //$("#contCategoryList").focus(function () {
+        //    //var contCat = $(this).find("option:selected").text();
+        //    //debugger
+
+        //    $.ajax({
+        //        type: "Post",
+        //        url: "/Event/GetContributingDowntimeCategoryList",
+        //        contentType: "html",
+        //        success: function (response) {
+        //            //debugger
+        //            $("#contCategoryList").empty();
+        //            $("#contCategoryList").append(response);
+        //            //debugger
+        //        }
+        //    })
+        //})
+
+        //$("#contCategoryList").change(function () {
+        //    $("#contDowntimeRootCauseList").empty();
+        //    var contCat = $(this).find("option:selected").text();
+        //    //debugger
+
+        //    $.ajax({
+        //        type: "Post",
+        //        url: "/Event/GetContributingDowntimeTypeList?ContDowntimeCategory=" + contCat,
+        //        contentType: "html",
+        //        success: function (response) {
+        //            //debugger
+        //            $("#contDowntimeTypeList").empty();
+        //            $("#contDowntimeTypeList").append(response);
+        //            //debugger
+        //        }
+        //    })
+        //})
+
+        //$("#contDowntimeTypeList").change(function () {
+        //    var contCat = $("#contCategoryList").find("option:selected").text();
+        //    var contType = $(this).find("option:selected").text();
+        //    //debugger
+
+        //    $.ajax({
+        //        type: "Post",
+        //        url: "/Event/GetContributingDowntimeRootCauseList?ContDowntimeCategory=" + contCat + "&ContDowntimeType=" + contType,
+        //        contentType: "html",
+        //        success: function (response) {
+        //            //debugger
+        //            $("#contDowntimeRootCauseList").empty();
+        //            $("#contDowntimeRootCauseList").append(response);
+        //            //debugger
+        //        }
+        //    })
+        //})
     })
 </script>

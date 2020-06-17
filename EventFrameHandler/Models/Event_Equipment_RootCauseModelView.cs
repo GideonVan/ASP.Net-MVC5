@@ -7,7 +7,7 @@ namespace EventFrameHandler.Models
 {
     public class Event_Equipment_RootCauseModelView
     {
-        public RootCauseModelView rcModelView { get; set; }
+        public RootCauseModelView rootCauseModelView { get; set; }
 
         public EquipmentModelView equipModelView { get; set; }
 

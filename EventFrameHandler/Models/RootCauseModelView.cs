@@ -7,14 +7,12 @@ namespace EventFrameHandler.Models
 {
     public class RootCauseModelView
     {
-        public string contEquipType { get; set; }
-
-        public string contEquip { get; set; }
-
-        public string contEquipName { get; set; }
+        public string contCategory { get; set; }
 
         public string contType { get; set; }
 
-        public string contDesc { get; set; }
+        public string contRootCause { get; set; }
+
+        public string contCkey { get; set; }
     }
 }

@@ -1,0 +1,8 @@
+﻿<option value="">--Select Downtime Type--</option>
+@if( ViewBag.contDowntimeTypeList != null)
+{
+    foreach (var item in ViewBag.contDowntimeTypeList)
+    {
+        <option value="@item.Value">@item.Text</option>
+    }
+}

@@ -1,0 +1,8 @@
+﻿<option value="">--Select Downtime Root Cause--</option>
+@if (ViewBag.contDowntimeRootCauseList != null)
+{
+    foreach (var item in ViewBag.contDowntimeRootCauseList)
+    {
+        <option value="@item.Value">@item.Text</option>
+    }
+}

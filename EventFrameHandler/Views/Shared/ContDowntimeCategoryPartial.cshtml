@@ -1,0 +1,8 @@
+﻿<option value="">--Select Downtime Category--</option>
+@if (ViewBag.contCategoryList != null)
+{
+    foreach (var item in ViewBag.contCategoryList)
+    {
+        <option value="@item.Value">@item.Text</option>
+    }
+}

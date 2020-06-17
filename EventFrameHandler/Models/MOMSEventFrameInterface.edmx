@@ -7,12 +7,12 @@
     <Schema Namespace="MOMSEventFrameInterfaceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="tbl_DimNonWorkOrderDowntimeAnnnotations">
           <Key>
-            <PropertyRef Name="CKey" />
+            <PropertyRef Name="Ckey" />
           </Key>
-          <Property Name="Equipment" Type="varchar" MaxLength="255" />
-          <Property Name="Downtime Type" Type="varchar" MaxLength="50" />
-          <Property Name="Root Cause" Type="varchar" MaxLength="50" />
-          <Property Name="CKey" Type="varchar" MaxLength="357" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Category" Type="varchar" MaxLength="255" />
+          <Property Name="DowntimeType" Type="varchar" MaxLength="50" />
+          <Property Name="RootCause" Type="varchar" MaxLength="50" />
+          <Property Name="Ckey" Type="varchar" MaxLength="357" StoreGeneratedPattern="Computed" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_DimSiteEquipment">
           <Key>
@@ -73,18 +73,9 @@
         </EntityType>
         <EntityContainer Name="MOMSEventFrameInterfaceEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="tbl_factFailureDowntimeCMMS" EntityType="Self.tbl_factFailureDowntimeCMMS" />
-          <EntitySet Name="tbl_DimNonWorkOrderDowntimeAnnnotations" EntityType="MOMSEventFrameInterfaceModel.tbl_DimNonWorkOrderDowntimeAnnnotations" />
           <EntitySet Name="tbl_DimSiteEquipment" EntityType="MOMSEventFrameInterfaceModel.tbl_DimSiteEquipment" />
+          <EntitySet Name="tbl_DimNonWorkOrderDowntimeAnnnotations" EntityType="MOMSEventFrameInterfaceModel.tbl_DimNonWorkOrderDowntimeAnnnotations" />
         </EntityContainer>
-        <EntityType Name="tbl_DimNonWorkOrderDowntimeAnnnotations">
-          <Key>
-            <PropertyRef Name="CKey" />
-          </Key>
-          <Property Name="Equipment" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Downtime_Type" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Root_Cause" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CKey" Type="String" Nullable="false" MaxLength="357" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
-        </EntityType>
         <EntityType Name="tbl_DimSiteEquipment">
           <Key>
             <PropertyRef Name="ElementID" />
@@ -96,6 +87,15 @@
           <Property Name="Site" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SiteArea" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SiteSection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tbl_DimNonWorkOrderDowntimeAnnnotations">
+          <Key>
+            <PropertyRef Name="Ckey" />
+          </Key>
+          <Property Name="Category" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="DowntimeType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RootCause" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Ckey" Type="String" Nullable="false" MaxLength="357" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -122,16 +122,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tbl_DimNonWorkOrderDowntimeAnnnotations">
-            <EntityTypeMapping TypeName="MOMSEventFrameInterfaceModel.tbl_DimNonWorkOrderDowntimeAnnnotations">
-              <MappingFragment StoreEntitySet="tbl_DimNonWorkOrderDowntimeAnnnotations">
-                <ScalarProperty Name="CKey" ColumnName="CKey" />
-                <ScalarProperty Name="Root_Cause" ColumnName="Root Cause" />
-                <ScalarProperty Name="Downtime_Type" ColumnName="Downtime Type" />
-                <ScalarProperty Name="Equipment" ColumnName="Equipment" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tbl_DimSiteEquipment">
             <EntityTypeMapping TypeName="MOMSEventFrameInterfaceModel.tbl_DimSiteEquipment">
               <MappingFragment StoreEntitySet="tbl_DimSiteEquipment">
@@ -142,6 +132,16 @@
                 <ScalarProperty Name="EquipmentNumber" ColumnName="EquipmentNumber" />
                 <ScalarProperty Name="EquipmentName" ColumnName="EquipmentName" />
                 <ScalarProperty Name="ElementID" ColumnName="ElementID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_DimNonWorkOrderDowntimeAnnnotations">
+            <EntityTypeMapping TypeName="MOMSEventFrameInterfaceModel.tbl_DimNonWorkOrderDowntimeAnnnotations">
+              <MappingFragment StoreEntitySet="tbl_DimNonWorkOrderDowntimeAnnnotations">
+                <ScalarProperty Name="Ckey" ColumnName="Ckey" />
+                <ScalarProperty Name="RootCause" ColumnName="RootCause" />
+                <ScalarProperty Name="DowntimeType" ColumnName="DowntimeType" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

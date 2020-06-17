@@ -22,7 +22,7 @@
     </div>*@
 
 
-<button class="btn btn-success" id="test" onclick="GetEquipmentNumberList()">Test</button>
+@*<button class="btn btn-success" id="test" onclick="GetEquipmentNumberList()">Test</button>*@
 
 @*This is the table of data for new events*@
 <div class="container-fluid text-nowrap" id="NewEventsContainer" style="width:100%">
@@ -74,7 +74,7 @@
             <div class="modal-footer">
 
                 <a href="#" class="btn btn-warning" data-dismiss="modal">Cancel</a>
-                <a href="#" class="btn btn-success" onclick="">Confirm</a>
+                <a href="#" class="btn btn-success" onclick="SetFirstResponderAnnotation()">Confirm</a>
 
             </div>
 
@@ -100,22 +100,33 @@
     <script src="//cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
 
 
-    @*<script type="text/javascript">
-        //test function
-        function GetEquipmentNumberList() {
-            debugger
+    <script type="text/javascript">
+
+        function SetFirstResponderAnnotation() {
             $.ajax({
                 type: "Post",
-                url: "/Event/GetEquipmentNumberList?EquipmentType=" + "Conveyor",
-                contentType: "html",
-                success: function (response) {
-                    debugger
-                    $("#equipNumList").empty();
-                    $("#equipNumList").append(response);
-                }
+                url: "/Event/SetFirstResponderAnnotation",
+                contentType:"html",
+                    success: function(response) {
+
+                    }
             })
         }
-    </script>*@
+        ////test function
+        //function GetEquipmentNumberList() {
+        //    debugger
+        //    $.ajax({
+        //        type: "Post",
+        //        url: "/Event/GetEquipmentNumberList?EquipmentType=" + "Conveyor",
+        //        contentType: "html",
+        //        success: function (response) {
+        //            debugger
+        //            $("#equipNumList").empty();
+        //            $("#equipNumList").append(response);
+        //        }
+        //    })
+        }
+    </script>
 
     <script>
         $(document).ready(function () {
@@ -249,7 +260,7 @@
                     $site = $(this).text();                         // Prints out the text within the <td>
                 });
 
-                var url = "/Event/SetEscalation?EventId=" + id + "&Site=" + encodeURIComponent($site);
+                var url = "/Event/SetFirstResponderPartial?EventId=" + id + "&Site=" + encodeURIComponent($site);
                 $("#myModalBodyDiv").load(url, function () {
                     $("#myModal").modal("show");
                 });
@@ -268,7 +279,7 @@
                     $site = $(this).text();                         // Prints out the text within the <td>
                 });
 
-                var url = "/Event/SetEscalation?EventId=" + id + "&Site=" + encodeURIComponent($site);
+                var url = "/Event/SetWorkOrderPartial?EventId=" + id + "&Site=" + encodeURIComponent($site);
                 $("#myModalBodyDiv").load(url, function () {
                     $("#myModal").modal("show");
                 });

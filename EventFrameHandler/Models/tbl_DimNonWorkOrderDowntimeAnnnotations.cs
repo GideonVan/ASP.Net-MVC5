@@ -14,9 +14,9 @@ namespace EventFrameHandler.Models
     
     public partial class tbl_DimNonWorkOrderDowntimeAnnnotations
     {
-        public string Equipment { get; set; }
-        public string Downtime_Type { get; set; }
-        public string Root_Cause { get; set; }
-        public string CKey { get; set; }
+        public string Category { get; set; }
+        public string DowntimeType { get; set; }
+        public string RootCause { get; set; }
+        public string Ckey { get; set; }
     }
 }
