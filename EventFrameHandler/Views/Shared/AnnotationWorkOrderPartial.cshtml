@@ -6,59 +6,62 @@
 
 <body style='margin:30px'>
     <div class="container">
+        @using (Html.BeginForm("Event", "Event", FormMethod.Post))
+        {
         <!-- Horizonatal Form -->
-        <div class="row">
-            <div class="col-xs-6">
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <h4>Registered Equipment Downtime</h4>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="site" class="col-xs-2">Site</label>
-                        <div class="col-xs-6">
-                            @Html.TextBoxFor(model => model.eventModelView.site, new { @class = "form-control", @placeholder = "Site", @readonly = true, @id = "site" })
+            <div class="row">
+                <div class="col-xs-6">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <h4>Registered Equipment Downtime</h4>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="equipment" class="col-xs-2">Equipment</label>
-                        <div class="col-xs-6">
-                            @Html.TextBoxFor(model => model.eventModelView.equipmentName, new { @class = "form-control", @placeholder = "Equipment", @readonly = true, @id = "equipment" })
+                        <div class="form-group">
+                            <label for="site" class="col-xs-2">Site</label>
+                            <div class="col-xs-6">
+                                @Html.TextBoxFor(model => model.eventModelView.site, new { @class = "form-control", @placeholder = "Site", @readonly = true, @id = "site" })
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="equipmentNumber" class="col-xs-2">Equipment Number</label>
-                        <div class="col-xs-6">
-                            @Html.TextBoxFor(model => model.eventModelView.equipmentNumber, new { @class = "form-control", @placeholder = "Equipment Number", @readonly = true, @id = "equipmentNumber" })
+                        <div class="form-group">
+                            <label for="equipment" class="col-xs-2">Equipment</label>
+                            <div class="col-xs-6">
+                                @Html.TextBoxFor(model => model.eventModelView.equipmentName, new { @class = "form-control", @placeholder = "Equipment", @readonly = true, @id = "equipment" })
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="startTime" class="col-xs-2">Start Time</label>
-                        <div class="col-xs-6">
-                            @Html.TextBoxFor(model => model.eventModelView.startTime, new { @class = "form-control", @placeholder = "Start Time", @readonly = true, @id = "startTime" })
+                        <div class="form-group">
+                            <label for="equipmentNumber" class="col-xs-2">Equipment Number</label>
+                            <div class="col-xs-6">
+                                @Html.TextBoxFor(model => model.eventModelView.equipmentNumber, new { @class = "form-control", @placeholder = "Equipment Number", @readonly = true, @id = "equipmentNumber" })
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="endTime" class="col-xs-2">End Time</label>
-                        <div class="col-xs-6">
-                            @Html.TextBoxFor(model => model.eventModelView.endTime, new { @class = "form-control", @placeholder = "End Time", @readonly = true, @id = "endTime" })
+                        <div class="form-group">
+                            <label for="startTime" class="col-xs-2">Start Time</label>
+                            <div class="col-xs-6">
+                                @Html.TextBoxFor(model => model.eventModelView.startTime, new { @class = "form-control", @placeholder = "Start Time", @readonly = true, @id = "startTime" })
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="duration" class="col-xs-2">Duration</label>
-                        <div class="col-xs-6">
-                            @Html.TextBoxFor(model => model.eventModelView.duration, new { @class = "form-control", @placeholder = "Duration", @readonly = true, @id = "duration" })
+                        <div class="form-group">
+                            <label for="endTime" class="col-xs-2">End Time</label>
+                            <div class="col-xs-6">
+                                @Html.TextBoxFor(model => model.eventModelView.endTime, new { @class = "form-control", @placeholder = "End Time", @readonly = true, @id = "endTime" })
+                            </div>
                         </div>
-                    </div>
 
-                </form>
+                        <div class="form-group">
+                            <label for="duration" class="col-xs-2">Duration</label>
+                            <div class="col-xs-6">
+                                @Html.TextBoxFor(model => model.eventModelView.duration, new { @class = "form-control", @placeholder = "Duration", @readonly = true, @id = "duration" })
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
             </div>
-        </div>
+         }
     </div>
 </body>
 

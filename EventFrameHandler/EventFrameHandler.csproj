@@ -152,6 +152,9 @@
       <DependentUpon>MOMSEventFrameInterface.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\RootCauseModelView.cs" />
+    <Compile Include="Models\tbl_DimEquipmentType.cs">
+      <DependentUpon>MOMSEventFrameInterface.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tbl_DimNonWorkOrderDowntimeAnnnotations.cs">
       <DependentUpon>MOMSEventFrameInterface.tt</DependentUpon>
     </Compile>
@@ -403,6 +406,7 @@
     <Content Include="Views\Shared\ContDowntimeTypePartial.cshtml" />
     <Content Include="Views\Shared\ContDowntimeRootCausePartial.cshtml" />
     <Content Include="Views\Shared\AnnotationWorkOrderPartial.cshtml" />
+    <Content Include="Views\Shared\ContDowntimeCategoryPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

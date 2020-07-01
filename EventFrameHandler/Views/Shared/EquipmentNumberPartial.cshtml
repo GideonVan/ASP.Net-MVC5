@@ -1,7 +1,9 @@
-﻿<option value="">--Select Equipment Number--</option>
-@if(ViewBag.equipmentNumberList != null)
+﻿@model EventFrameHandler.Models.EquipmentModelView
+
+<option value="">--Select Equipment Number--</option>
+@if (Model.equipNumberList != null)
 {
-    foreach(var item in ViewBag.equipmentNumberList)
+    foreach (var item in Model.equipNumberList)
     {
         <option value="@item.Value">@item.Text</option>
     }

@@ -12,16 +12,18 @@ namespace EventFrameHandler.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class tbl_DimSiteEquipment
+    public partial class tbl_DimEquipmentType
     {
-        public string ElementID { get; set; }
-        public string EquipmentName { get; set; }
-        public string EquipmentNumber { get; set; }
-        public string EquipmentType { get; set; }
-        public string Site { get; set; }
-        public string SiteArea { get; set; }
-        public string SiteSection { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public tbl_DimEquipmentType()
+        {
+            this.tbl_DimSiteEquipment = new HashSet<tbl_DimSiteEquipment>();
+        }
     
-        public virtual tbl_DimEquipmentType tbl_DimEquipmentType { get; set; }
+        public int ID { get; set; }
+        public string EquipmentType { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbl_DimSiteEquipment> tbl_DimSiteEquipment { get; set; }
     }
 }

@@ -5,6 +5,13 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="MOMSEventFrameInterfaceModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_DimEquipmentType">
+          <Key>
+            <PropertyRef Name="EquipmentType" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EquipmentType" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
         <EntityType Name="tbl_DimNonWorkOrderDowntimeAnnnotations">
           <Key>
             <PropertyRef Name="Ckey" />
@@ -44,10 +51,27 @@
           <Property Name="ElementID" Type="varchar" MaxLength="255" />
           <Property Name="IsEscalated" Type="bit" />
         </EntityType>
+        <Association Name="FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType">
+          <End Role="tbl_DimEquipmentType" Type="Self.tbl_DimEquipmentType" Multiplicity="0..1" />
+          <End Role="tbl_DimSiteEquipment" Type="Self.tbl_DimSiteEquipment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_DimEquipmentType">
+              <PropertyRef Name="EquipmentType" />
+            </Principal>
+            <Dependent Role="tbl_DimSiteEquipment">
+              <PropertyRef Name="EquipmentType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="MOMSEventFrameInterfaceModelStoreContainer">
+          <EntitySet Name="tbl_DimEquipmentType" EntityType="Self.tbl_DimEquipmentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_DimNonWorkOrderDowntimeAnnnotations" EntityType="Self.tbl_DimNonWorkOrderDowntimeAnnnotations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_DimSiteEquipment" EntityType="Self.tbl_DimSiteEquipment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_factFailureDowntimeCMMS" EntityType="Self.tbl_factFailureDowntimeCMMS" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType" Association="Self.FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType">
+            <End Role="tbl_DimEquipmentType" EntitySet="tbl_DimEquipmentType" />
+            <End Role="tbl_DimSiteEquipment" EntitySet="tbl_DimSiteEquipment" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -75,6 +99,11 @@
           <EntitySet Name="tbl_factFailureDowntimeCMMS" EntityType="Self.tbl_factFailureDowntimeCMMS" />
           <EntitySet Name="tbl_DimSiteEquipment" EntityType="MOMSEventFrameInterfaceModel.tbl_DimSiteEquipment" />
           <EntitySet Name="tbl_DimNonWorkOrderDowntimeAnnnotations" EntityType="MOMSEventFrameInterfaceModel.tbl_DimNonWorkOrderDowntimeAnnnotations" />
+          <EntitySet Name="tbl_DimEquipmentType" EntityType="MOMSEventFrameInterfaceModel.tbl_DimEquipmentType" />
+          <AssociationSet Name="FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType" Association="MOMSEventFrameInterfaceModel.FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType">
+            <End Role="tbl_DimEquipmentType" EntitySet="tbl_DimEquipmentType" />
+            <End Role="tbl_DimSiteEquipment" EntitySet="tbl_DimSiteEquipment" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="tbl_DimSiteEquipment">
           <Key>
@@ -87,6 +116,7 @@
           <Property Name="Site" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SiteArea" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SiteSection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tbl_DimEquipmentType" Relationship="MOMSEventFrameInterfaceModel.FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType" FromRole="tbl_DimSiteEquipment" ToRole="tbl_DimEquipmentType" />
         </EntityType>
         <EntityType Name="tbl_DimNonWorkOrderDowntimeAnnnotations">
           <Key>
@@ -97,6 +127,26 @@
           <Property Name="RootCause" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Ckey" Type="String" Nullable="false" MaxLength="357" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="tbl_DimEquipmentType">
+          <Key>
+            <PropertyRef Name="EquipmentType" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EquipmentType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="tbl_DimSiteEquipment" Relationship="MOMSEventFrameInterfaceModel.FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType" FromRole="tbl_DimEquipmentType" ToRole="tbl_DimSiteEquipment" />
+        </EntityType>
+        <Association Name="FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType">
+          <End Type="MOMSEventFrameInterfaceModel.tbl_DimEquipmentType" Role="tbl_DimEquipmentType" Multiplicity="0..1" />
+          <End Type="MOMSEventFrameInterfaceModel.tbl_DimSiteEquipment" Role="tbl_DimSiteEquipment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_DimEquipmentType">
+              <PropertyRef Name="EquipmentType" />
+            </Principal>
+            <Dependent Role="tbl_DimSiteEquipment">
+              <PropertyRef Name="EquipmentType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -142,6 +192,14 @@
                 <ScalarProperty Name="RootCause" ColumnName="RootCause" />
                 <ScalarProperty Name="DowntimeType" ColumnName="DowntimeType" />
                 <ScalarProperty Name="Category" ColumnName="Category" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_DimEquipmentType">
+            <EntityTypeMapping TypeName="MOMSEventFrameInterfaceModel.tbl_DimEquipmentType">
+              <MappingFragment StoreEntitySet="tbl_DimEquipmentType">
+                <ScalarProperty Name="EquipmentType" ColumnName="EquipmentType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

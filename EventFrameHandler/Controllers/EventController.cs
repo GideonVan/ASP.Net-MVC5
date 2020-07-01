@@ -111,29 +111,39 @@ namespace EventFrameHandler.Controllers
             }
         }
 
-        public ActionResult SetFirstResponderPartial (string EventID, string Site) { 
+        public ActionResult SetFirstResponderPartial (string EventID, string Site) 
+        { 
             
             using(MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
-            { 
-                ViewBag.equipTypeList = new SelectList(GetEquipmentTypeList(Site), "equipNumber", "equipType");
+            {
+                //ViewBag.equipTypeList = new SelectList(GetEquipmentTypeList(Site), "elementID", "equipType");
+                //ViewBag.contCategoryList = new SelectList(GetContributingDowntimeCategoryList(), "", "contCategory");
 
-                ViewBag.contCategoryList = new SelectList(GetContributingDowntimeCategoryList(), "contCkey", "contCategory");
+                tbl_factFailureDowntimeCMMS dtEvent = db.tbl_factFailureDowntimeCMMS.SingleOrDefault(x => x.UniqueID == EventID);
 
-                Event_Equipment_RootCauseModelView dtEventModel = new Event_Equipment_RootCauseModelView();
+                Event_Equipment_RootCauseModelView parent = new Event_Equipment_RootCauseModelView();
 
-                dtEventModel.eventModelView = new EventModelView();
+                parent.eventModelView = new EventModelView();
+                parent.equipModelView = new EquipmentModelView();
+                parent.rootCauseModelView = new RootCauseModelView();
 
-                var dtEvent = db.tbl_factFailureDowntimeCMMS.SingleOrDefault(x => x.UniqueID == EventID);
+                parent.equipModelView.equipTypeList = new SelectList(GetEquipmentTypeList(Site), "", "equipType");
+                parent.rootCauseModelView.contCategoryList = new SelectList(GetContributingDowntimeCategoryList(), "", "contCategory");
 
-                dtEventModel.eventModelView.uniqueID = dtEvent.UniqueID;
-                dtEventModel.eventModelView.equipmentName = dtEvent.EquipmentName;
-                dtEventModel.eventModelView.equipmentNumber = dtEvent.EquipmentNumber;
-                dtEventModel.eventModelView.startTime = dtEvent.StartTime;
-                dtEventModel.eventModelView.endTime = dtEvent.EndTime;
-                dtEventModel.eventModelView.duration = dtEvent.Duration;
-                dtEventModel.eventModelView.site = dtEvent.Site;
+                parent.equipModelView.equipNumberList = new SelectList("");
+                parent.equipModelView.equipNameList = new SelectList("");
+                parent.rootCauseModelView.contTypeList = new SelectList("");
+                parent.rootCauseModelView.contRootCauseList = new SelectList("");
 
-                return PartialView("AnnotationFirstResponderPartial", dtEventModel);
+                parent.eventModelView.uniqueID = dtEvent.UniqueID;
+                parent.eventModelView.equipmentName = dtEvent.EquipmentName;
+                parent.eventModelView.equipmentNumber = dtEvent.EquipmentNumber;
+                parent.eventModelView.startTime = dtEvent.StartTime;
+                parent.eventModelView.endTime = dtEvent.EndTime;
+                parent.eventModelView.duration = dtEvent.Duration;
+                parent.eventModelView.site = dtEvent.Site;
+
+                return PartialView("AnnotationFirstResponderPartial", parent);
             }
         }
 
@@ -142,23 +152,23 @@ namespace EventFrameHandler.Controllers
 
             using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
             {
-                Event_Equipment_RootCauseModelView dtEventModel = new Event_Equipment_RootCauseModelView();
+                Event_Equipment_RootCauseModelView parent = new Event_Equipment_RootCauseModelView();
 
                 ViewBag.equipTypeList = new SelectList(GetEquipmentTypeList(Site), "equipNumber", "equipType");
 
-                dtEventModel.eventModelView = new EventModelView();
+                parent.eventModelView = new EventModelView();              
 
                 tbl_factFailureDowntimeCMMS dtEvent = db.tbl_factFailureDowntimeCMMS.SingleOrDefault(x => x.UniqueID == EventID);
 
-                dtEventModel.eventModelView.uniqueID = dtEvent.UniqueID;
-                dtEventModel.eventModelView.equipmentName = dtEvent.EquipmentName;
-                dtEventModel.eventModelView.equipmentNumber = dtEvent.EquipmentNumber;
-                dtEventModel.eventModelView.startTime = dtEvent.StartTime;
-                dtEventModel.eventModelView.endTime = dtEvent.EndTime;
-                dtEventModel.eventModelView.duration = dtEvent.Duration;
-                dtEventModel.eventModelView.site = dtEvent.Site;
+                parent.eventModelView.uniqueID = dtEvent.UniqueID;
+                parent.eventModelView.equipmentName = dtEvent.EquipmentName;
+                parent.eventModelView.equipmentNumber = dtEvent.EquipmentNumber;
+                parent.eventModelView.startTime = dtEvent.StartTime;
+                parent.eventModelView.endTime = dtEvent.EndTime;
+                parent.eventModelView.duration = dtEvent.Duration;
+                parent.eventModelView.site = dtEvent.Site;
 
-                return PartialView("AnnotationWorkOrderPartial", dtEventModel);
+                return PartialView("AnnotationWorkOrderPartial", parent);
             }
         }
 
@@ -172,27 +182,42 @@ namespace EventFrameHandler.Controllers
             }
         }
 
-        public ActionResult GetEquipmentNumberList(string EquipmentType)
+        public JsonResult GetEquipmentNumberList(string EquipmentType)
         {
             using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
             {
                 List<EquipmentModelView> equipmentNumberList = db.tbl_DimSiteEquipment.Where(x => x.EquipmentType == EquipmentType).Select(x => new EquipmentModelView { equipNumber = x.EquipmentNumber }).Distinct().ToList();
 
-                ViewBag.equipmentNumberList = new SelectList(equipmentNumberList, "equipName","equipNumber");
+                return Json(equipmentNumberList, JsonRequestBehavior.AllowGet);
 
-                return PartialView("EquipmentNumberPartial");
             }
         }
 
-        public ActionResult GetEquipmentNameList(string EquipmentNumber)
+        //public ActionResult GetEquipmentNameList(string EquipmentNumber)
+        //{
+        //    using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
+        //    {
+        //        List<EquipmentModelView> equipmentNameList = db.tbl_DimSiteEquipment.Where(x => x.EquipmentNumber== EquipmentNumber).Select(x => new EquipmentModelView { equipName = x.EquipmentName }).Distinct().ToList();
+
+        //        //ViewBag.equipmentNameList = new SelectList(equipmentNameList, "equipNumber", "equipName");
+
+        //        Event_Equipment_RootCauseModelView parent = new Event_Equipment_RootCauseModelView();
+
+        //        parent.equipModelView = new EquipmentModelView();
+
+        //        parent.equipModelView.equipNameList = new SelectList(equipmentNameList, "equipNumber", "equipName");
+
+        //        return PartialView("EquipmentNamePartial");
+        //    }
+        //}
+
+        public JsonResult GetEquipmentNameList(string EquipmentNumber)
         {
             using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
             {
-                List<EquipmentModelView> equipmentNameList = db.tbl_DimSiteEquipment.Where(x => x.EquipmentNumber== EquipmentNumber).Select(x => new EquipmentModelView { equipName = x.EquipmentName }).Distinct().ToList();
+                List<EquipmentModelView> equipmentNameList = db.tbl_DimSiteEquipment.Where(x => x.EquipmentNumber == EquipmentNumber).Select(x => new EquipmentModelView { equipName = x.EquipmentName }).Distinct().ToList();
 
-                ViewBag.equipmentNameList = new SelectList(equipmentNameList, "equipNumber", "equipName");
-
-                return PartialView("EquipmentNamePartial");
+                return Json(equipmentNameList, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -206,15 +231,21 @@ namespace EventFrameHandler.Controllers
             }
         }
 
-        public ActionResult GetContributingDowntimeTypeList(string ContDowntimeCategory)
+        public JsonResult GetContributingDowntimeTypeList(string ContDowntimeCategory)
         {
             using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
             {
                 List<RootCauseModelView> contDowntimeTypeList = db.tbl_DimNonWorkOrderDowntimeAnnnotations.Where(x=> x.Category == ContDowntimeCategory).Select(x => new RootCauseModelView { contType = x.DowntimeType }).Distinct().ToList();
 
-                ViewBag.contDowntimeTypeList = new SelectList(contDowntimeTypeList, "contCkey", "contType");
+                //ViewBag.contDowntimeTypeList = new SelectList(contDowntimeTypeList, "contCkey", "contType");
 
-                return PartialView("ContDowntimeTypePartial");
+                //Event_Equipment_RootCauseModelView parent = new Event_Equipment_RootCauseModelView();
+
+                //parent.rootCauseModelView = new RootCauseModelView();
+
+                //parent.rootCauseModelView.contTypeList = new SelectList(contDowntimeTypeList, "", "contType");
+
+                return Json(contDowntimeTypeList, JsonRequestBehavior.AllowGet);
             }
         }
 
@@ -222,14 +253,28 @@ namespace EventFrameHandler.Controllers
         {
             using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
             {
+
                 List<RootCauseModelView> contDowntimeRootCauseList = db.tbl_DimNonWorkOrderDowntimeAnnnotations.Where(x => x.Category == ContDowntimeCategory && x.DowntimeType == ContDowntimeType).Select(x => new RootCauseModelView { contRootCause = x.RootCause }).Distinct().ToList();
 
-                ViewBag.contDowntimeRootCauseList = new SelectList(contDowntimeRootCauseList, "contCkey", "contRootCause");
+                //ViewBag.contDowntimeRootCauseList = new SelectList(contDowntimeRootCauseList, "contCkey", "contRootCause");
 
-                return PartialView("ContDowntimeRootCausePartial");
+                //Event_Equipment_RootCauseModelView parent = new Event_Equipment_RootCauseModelView();
+
+                //parent.rootCauseModelView = new RootCauseModelView();
+
+                //parent.rootCauseModelView.contRootCauseList = new SelectList(contDowntimeRootCauseList, "", "contRootCause");
+
+                return Json(contDowntimeRootCauseList, JsonRequestBehavior.AllowGet);
             }
         }
 
+        public ActionResult SetFirstResponderAnnotation(Event_Equipment_RootCauseModelView model, FormCollection collection)
+        {
+            using(MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
+            {
+                return View();
+            }
+        }
         //public ActionResult AjaxHandler(jQueryDataTableParamModel param)
         //{
 
