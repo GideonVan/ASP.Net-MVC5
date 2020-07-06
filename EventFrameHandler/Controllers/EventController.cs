@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Web;
 using System.Web.Mvc;
 using EventFrameHandler.Models;
@@ -105,27 +107,28 @@ namespace EventFrameHandler.Controllers
         {
             using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
             {
-                List<EventModelView> dtList = db.tbl_factFailureDowntimeCMMS.Where(x => x.IsEscalated == false).OrderByDescending(x=>x.StartTime).Select(x => new EventModelView { equipmentName = x.EquipmentName, startTime = x.StartTime, endTime = x.EndTime, duration = x.Duration, equipmentNumber = x.EquipmentNumber,site = x.Site, uniqueID = x.UniqueID }).ToList();
+                List<EventModelView> dtList = db.tbl_factFailureDowntimeCMMS.Where(x => x.IsEscalated == false).OrderByDescending(x => x.StartTime).Select(x => new EventModelView { equipmentName = x.EquipmentName, startTime = x.StartTime, endTime = x.EndTime, duration = x.Duration, equipmentNumber = x.EquipmentNumber, site = x.Site, uniqueID = x.UniqueID }).ToList();
 
                 return Json(new { data = dtList }, JsonRequestBehavior.AllowGet);
             }
         }
 
-        public ActionResult SetFirstResponderPartial (string EventID, string Site) 
-        { 
-            
-            using(MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
+        public ActionResult SetFirstResponderPartial(string EventID, string Site)
+        {
+
+            using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
             {
                 //ViewBag.equipTypeList = new SelectList(GetEquipmentTypeList(Site), "elementID", "equipType");
                 //ViewBag.contCategoryList = new SelectList(GetContributingDowntimeCategoryList(), "", "contCategory");
 
-                tbl_factFailureDowntimeCMMS dtEvent = db.tbl_factFailureDowntimeCMMS.SingleOrDefault(x => x.UniqueID == EventID);
+                var dtEvent = db.tbl_factFailureDowntimeCMMS.SingleOrDefault(x => x.UniqueID == EventID);
 
-                Event_Equipment_RootCauseModelView parent = new Event_Equipment_RootCauseModelView();
-
-                parent.eventModelView = new EventModelView();
-                parent.equipModelView = new EquipmentModelView();
-                parent.rootCauseModelView = new RootCauseModelView();
+                Event_Equipment_RootCauseModelView parent = new Event_Equipment_RootCauseModelView
+                {
+                    eventModelView = new EventModelView(),
+                    equipModelView = new EquipmentModelView(),
+                    rootCauseModelView = new RootCauseModelView()
+                };
 
                 parent.equipModelView.equipTypeList = new SelectList(GetEquipmentTypeList(Site), "", "equipType");
                 parent.rootCauseModelView.contCategoryList = new SelectList(GetContributingDowntimeCategoryList(), "", "contCategory");
@@ -143,7 +146,7 @@ namespace EventFrameHandler.Controllers
                 parent.eventModelView.duration = dtEvent.Duration;
                 parent.eventModelView.site = dtEvent.Site;
 
-                return PartialView("AnnotationFirstResponderPartial", parent);
+                return PartialView("EventAndRootCausePartialGrid", parent);
             }
         }
 
@@ -156,7 +159,7 @@ namespace EventFrameHandler.Controllers
 
                 ViewBag.equipTypeList = new SelectList(GetEquipmentTypeList(Site), "equipNumber", "equipType");
 
-                parent.eventModelView = new EventModelView();              
+                parent.eventModelView = new EventModelView();
 
                 tbl_factFailureDowntimeCMMS dtEvent = db.tbl_factFailureDowntimeCMMS.SingleOrDefault(x => x.UniqueID == EventID);
 
@@ -172,7 +175,7 @@ namespace EventFrameHandler.Controllers
             }
         }
 
-        public List<EquipmentModelView> GetEquipmentTypeList (string Site)
+        public List<EquipmentModelView> GetEquipmentTypeList(string Site)
         {
             using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
             {
@@ -235,7 +238,7 @@ namespace EventFrameHandler.Controllers
         {
             using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
             {
-                List<RootCauseModelView> contDowntimeTypeList = db.tbl_DimNonWorkOrderDowntimeAnnnotations.Where(x=> x.Category == ContDowntimeCategory).Select(x => new RootCauseModelView { contType = x.DowntimeType }).Distinct().ToList();
+                List<RootCauseModelView> contDowntimeTypeList = db.tbl_DimNonWorkOrderDowntimeAnnnotations.Where(x => x.Category == ContDowntimeCategory).Select(x => new RootCauseModelView { contType = x.DowntimeType }).Distinct().ToList();
 
                 //ViewBag.contDowntimeTypeList = new SelectList(contDowntimeTypeList, "contCkey", "contType");
 
@@ -268,40 +271,84 @@ namespace EventFrameHandler.Controllers
             }
         }
 
-        public ActionResult SetFirstResponderAnnotation(Event_Equipment_RootCauseModelView model, FormCollection collection)
+        public ActionResult InsertFirstResponderAnnotation(Event_Equipment_RootCauseModelView model, FormCollection collection)
         {
-            using(MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
+            using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
             {
-                return View();
+                try
+                {
+                    var result = UpdateMasterDowntimeTable(model.eventModelView.uniqueID);
+
+                    var annotation = new tbl_factMaintenanceAnnotations();
+                    annotation.UniqueID = model.eventModelView.uniqueID;
+                    annotation.FailureTypeDescription = model.rootCauseModelView.contType;
+                    annotation.FailureDescription = model.rootCauseModelView.contRootCause;
+                    annotation.EquipmentType = model.equipModelView.equipType;
+                    annotation.EquipmentName = model.equipModelView.equipName;
+                    annotation.EquipmentNumber = model.equipModelView.equipNumber;
+
+                    annotation.ModifyStamp = DateTime.Now;
+
+                    db.tbl_factMaintenanceAnnotations.Add(annotation);
+
+                    db.SaveChanges();
+
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+
+                return RedirectToAction("Events");
             }
         }
-        //public ActionResult AjaxHandler(jQueryDataTableParamModel param)
-        //{
 
-        //    using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
-        //    {
-        //        List<DowntimeModelView> dtList = db.tbl_factFailureDowntimeCMMS.Where(x => x.IsEscalated == false).Select(x => new DowntimeModelView { UniqueID = x.UniqueID, Equipment = x.Equipment, StartTime = x.StartTime, EndTime = x.EndTime, Duration = x.Duration, Equipment_Number = x.Equipment_Number, Site = x.Site }).ToList();
+        public int UpdateMasterDowntimeTable(string uniqueId)
+        {
+            using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
+            {
+                try
+                {
+                    var eventToUpdate = db.tbl_factFailureDowntimeCMMS.Find(uniqueId);
 
-        //        //var result = from i in dtList select new[] { i.UniqueID, i.Equipment, i.Equipment_Number, i.StartTime.ToString(), i.EndTime.ToString(), i.Duration, i.Site };
+                    db.SaveChanges();
 
-        //        return Json(new
-        //        {
-        //            sEcho = param.sEcho,
-        //            iTotalRecords = dtList.Count(),
-        //            iTotalDisplayRecords = dtList.Count(),
-        //            data = dtList
-        //        }, JsonRequestBehavior.AllowGet);
-        //    }
-        //}
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
 
-        //public ActionResult GetEventsFiltered(DateTime startTime)
-        //{
-        //    using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
-        //    {
-        //        List<DowntimeModelView> dtList = db.tbl_factFailureDowntimeCMMS.Where(x => x.IsEscalated == false && x.StartTime > startTime).Select(x => new DowntimeModelView { Equipment = x.Equipment, StartTime = x.StartTime, EndTime = x.EndTime, Duration = x.Duration, Equipment_Number = x.Equipment_Number, Site = x.Site, UniqueID = x.UniqueID }).ToList();
-
-        //        return Json( new { data = dtList }, JsonRequestBehavior.AllowGet );
-        //    }
-        //}
+                return 0;
+            }
+        }
     }
 }
+//public ActionResult AjaxHandler(jQueryDataTableParamModel param)
+//{
+
+//    using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
+//    {
+//        List<DowntimeModelView> dtList = db.tbl_factFailureDowntimeCMMS.Where(x => x.IsEscalated == false).Select(x => new DowntimeModelView { UniqueID = x.UniqueID, Equipment = x.Equipment, StartTime = x.StartTime, EndTime = x.EndTime, Duration = x.Duration, Equipment_Number = x.Equipment_Number, Site = x.Site }).ToList();
+
+//        //var result = from i in dtList select new[] { i.UniqueID, i.Equipment, i.Equipment_Number, i.StartTime.ToString(), i.EndTime.ToString(), i.Duration, i.Site };
+
+//        return Json(new
+//        {
+//            sEcho = param.sEcho,
+//            iTotalRecords = dtList.Count(),
+//            iTotalDisplayRecords = dtList.Count(),
+//            data = dtList
+//        }, JsonRequestBehavior.AllowGet);
+//    }
+//}
+
+//public ActionResult GetEventsFiltered(DateTime startTime)
+//{
+//    using (MOMSEventFrameInterfaceEntities db = new MOMSEventFrameInterfaceEntities())
+//    {
+//        List<DowntimeModelView> dtList = db.tbl_factFailureDowntimeCMMS.Where(x => x.IsEscalated == false && x.StartTime > startTime).Select(x => new DowntimeModelView { Equipment = x.Equipment, StartTime = x.StartTime, EndTime = x.EndTime, Duration = x.Duration, Equipment_Number = x.Equipment_Number, Site = x.Site, UniqueID = x.UniqueID }).ToList();
+
+//        return Json( new { data = dtList }, JsonRequestBehavior.AllowGet );
+//    }
+//}

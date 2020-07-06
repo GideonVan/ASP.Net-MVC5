@@ -1,0 +1,241 @@
+﻿@model EventFrameHandler.Models.EventModelView
+
+
+<body style='margin:30px'>
+
+    <div class="container">
+        <!-- Horizontal Form -->
+        <div class="row">
+            <div class="col-xs-6">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <h4>Registered Equipment Downtime</h4>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="uniqueId" class="col-xs-6">Event Id</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.uniqueID, new { @class = "form-control", @placeholder = "Event Id", @readonly = true, @id = "uniqueId" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="site" class="col-xs-6">Site</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.site, new { @class = "form-control", @placeholder = "Site", @readonly = true, @id = "site" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipment" class="col-xs-6">Equipment</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.equipmentName, new { @class = "form-control", @placeholder = "Equipment", @readonly = true, @id = "equipment" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipmentNumber" class="col-xs-6">Equipment Number</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.equipmentNumber, new { @class = "form-control", @placeholder = "Equipment Number", @readonly = true, @id = "equipmentNumber" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="startTime" class="col-xs-6">Start Time</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.startTime, new { @class = "form-control", @placeholder = "Start Time", @readonly = true, @id = "startTime" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="endTime" class="col-xs-6">End Time</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.endTime, new { @class = "form-control", @placeholder = "End Time", @readonly = true, @id = "endTime" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="duration" class="col-xs-6">Duration</label>
+                        <div class="col-xs-6">
+                            @Html.TextBoxFor(model => model.eventModelView.duration, new { @class = "form-control", @placeholder = "Duration", @readonly = true, @id = "duration" })
+                        </div>
+                    </div>
+
+                    @*Lists for the Self Annotation and Create Work Order*@
+                    @*<div class="form-group">
+                        <h4>Equipment Downtime Annotation</h4>
+                    </div>
+                    <div class="form-group">
+                        <label for="equipTypeList" class="col-xs-6">Equipment Type</label>
+                        <div class="col-xs-6">
+                            @if (Model.equipModelView.equipTypeList != null)
+                            {
+                                @Html.DropDownListFor(model => model.equipModelView.equipType, Model.equipModelView.equipTypeList, "--Select Equipment Type--", new { @class = "form-control", @id = "equipTypeList" })
+                            }
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipNumList" class="col-xs-6">Equipment Number</label>
+                        <div class="col-xs-6">
+                            @if (Model.equipModelView.equipNumberList != null)
+                            {
+                                @Html.DropDownListFor(model => model.equipModelView.equipNumber, Model.equipModelView.equipNumberList, "--Select Equipment Number--", new { @class = "form-control", @id = "equipNumList" })
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipNameList" class="col-xs-6">Equipment Name</label>
+                        <div class="col-xs-6">
+                            @if (Model.equipModelView.equipNameList != null)
+                            {
+                                @Html.DropDownListFor(model => model.equipModelView.equipName, Model.equipModelView.equipNameList, "--Equipment Name--", new { @class = "form-control", @id = "equipNameList" })
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contCategoryList" class="col-xs-6">Downtime Category</label>
+                        <div class="col-xs-6">
+                            @if (Model.rootCauseModelView.contCategoryList != null)
+                            {
+                                @Html.DropDownListFor(model => model.rootCauseModelView.contCategory, Model.rootCauseModelView.contCategoryList, "--Select Downtime Category--", new { @class = "form-control", @id = "contCategoryList" })
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contDowntimeTypeList" class="col-xs-6">Downtime Type</label>
+                        <div class="col-xs-6">
+                            @if (Model.rootCauseModelView.contTypeList != null)
+                            {
+                                @Html.DropDownListFor(model => model.rootCauseModelView.contType, Model.rootCauseModelView.contTypeList, "--Select Downtime Type--", new { @class = "form-control", @id = "contDowntimeTypeList" })
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contDowntimeRootCauseList" class="col-xs-6">Root Cause</label>
+                        <div class="col-xs-6">
+                            @if (Model.rootCauseModelView.contRootCauseList != null)
+                            {
+                                @Html.DropDownListFor(model => model.rootCauseModelView.contRootCause, Model.rootCauseModelView.contRootCauseList, "--Select Downtime Root Cause--", new { @class = "form-control", @id = "contDowntimeRootCauseList" })
+                            }
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-xs-6">
+                            <button type="button" class="btn btn-warning" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>*@
+
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+@*<script type="text/javascript">*@
+<script>
+    $(document).ready(function () {
+        $("#equipTypeList").change(function () {
+            $("#equipNumList").empty();
+            $("#equipNameList").empty();
+            var equipType = $(this).find("option:selected").text();
+            //debugger
+
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/Event/GetEquipmentNumberList?EquipmentType=" + equipType,
+            //    contentType: "html",
+            //    success: function (response) {
+            //        debugger
+            //        $("#equipNumList").empty();
+            //        $("#equipNumList").append(response);
+            //        debugger
+            //    }
+            //})
+
+            $.ajax({
+                type: "GET",
+                url: "/Event/GetEquipmentNumberList?EquipmentType=" + equipType,
+                dataType: "json",
+                success: function (data) {
+                    //debugger
+                    $("#equipNumList").empty();
+                    $("#equipNumList").append(new Option("--Select Equipment Number--", ""));
+                    $.each(data, function (i, item) {
+                        $("#equipNumList").append("<option value='" + item.equipNumber + "'>" + item.equipNumber + "</option>");
+                    })
+                    //debugger
+                }
+            })
+        })
+
+        $("#equipNumList").change(function () {
+            var equipNum = $(this).find("option:selected").text();
+            //debugger
+
+            $.ajax({
+                type: "GET",
+                url: "/Event/GetEquipmentNameList?EquipmentNumber=" + equipNum,
+                contentType: "json",
+                success: function (data) {
+                    //debugger
+                    $("#equipNameList").empty();
+                    $.each(data, function (i, item) {
+                        $("#equipNameList").append("<option value='" + item.equipName + "'>" + item.equipName + "</option>");
+                    })
+                    //debugger
+                }
+            })
+        })
+
+        $("#contCategoryList").change(function () {
+            $("#contDowntimeRootCauseList").empty();
+            var contCat = $(this).find("option:selected").text();
+            //debugger
+
+            $.ajax({
+                type: "GET",
+                url: "/Event/GetContributingDowntimeTypeList?ContDowntimeCategory=" + contCat,
+                contentType: "json",
+                success: function (data) {
+                    //debugger
+                    $("#contDowntimeTypeList").empty();
+                    $("#contDowntimeTypeList").append(new Option("--Select Downtime Category--", ""));
+                    $.each(data, function (i, item) {
+                        $("#contDowntimeTypeList").append("<option value='" + item.contType + "'>" + item.contType + "</option>");
+                    })
+                    //debugger
+                }
+            })
+        })
+
+        $("#contDowntimeTypeList").change(function () {
+            var contCat = $("#contCategoryList").find("option:selected").text();
+            var contType = $(this).find("option:selected").text();
+            //debugger
+
+            $.ajax({
+                type: "GET",
+                url: "/Event/GetContributingDowntimeRootCauseList?ContDowntimeCategory=" + contCat + "&ContDowntimeType=" + contType,
+                contentType: "json",
+                success: function (data) {
+                    //debugger
+                    $("#contDowntimeRootCauseList").empty();
+                    $("#contDowntimeRootCauseList").append(new Option("--Select Downtime Root Cause--", ""));
+                    $.each(data, function (i, item) {
+                        $("#contDowntimeRootCauseList").append("<option value='" + item.contRootCause + "'>" + item.contRootCause + "</option>");
+                    })
+                    //debugger
+                }
+            })
+        })
+    })
+</script>

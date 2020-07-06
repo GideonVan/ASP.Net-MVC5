@@ -29,5 +29,6 @@ namespace EventFrameHandler.Models
         public virtual DbSet<tbl_DimSiteEquipment> tbl_DimSiteEquipment { get; set; }
         public virtual DbSet<tbl_DimNonWorkOrderDowntimeAnnnotations> tbl_DimNonWorkOrderDowntimeAnnnotations { get; set; }
         public virtual DbSet<tbl_DimEquipmentType> tbl_DimEquipmentType { get; set; }
+        public virtual DbSet<tbl_factMaintenanceAnnotations> tbl_factMaintenanceAnnotations { get; set; }
     }
 }

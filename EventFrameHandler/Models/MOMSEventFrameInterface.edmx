@@ -9,8 +9,8 @@
           <Key>
             <PropertyRef Name="EquipmentType" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="EquipmentType" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EquipmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EquipmentType" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="tbl_DimNonWorkOrderDowntimeAnnnotations">
           <Key>
@@ -25,13 +25,13 @@
           <Key>
             <PropertyRef Name="ElementID" />
           </Key>
-          <Property Name="ElementID" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="EquipmentName" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="EquipmentNumber" Type="varchar" MaxLength="50" />
-          <Property Name="EquipmentType" Type="varchar" MaxLength="50" />
-          <Property Name="Site" Type="nvarchar" MaxLength="50" />
-          <Property Name="SiteArea" Type="nvarchar" MaxLength="50" />
-          <Property Name="SiteSection" Type="nvarchar" MaxLength="50" />
+          <Property Name="ElementID" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="EquipmentName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="EquipmentNumber" Type="nvarchar" MaxLength="255" />
+          <Property Name="EquipmentType" Type="nvarchar" MaxLength="255" />
+          <Property Name="Site" Type="nvarchar" MaxLength="255" />
+          <Property Name="SiteArea" Type="nvarchar" MaxLength="255" />
+          <Property Name="SiteSection" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="tbl_factFailureDowntimeCMMS">
           <Key>
@@ -51,14 +51,31 @@
           <Property Name="ElementID" Type="varchar" MaxLength="255" />
           <Property Name="IsEscalated" Type="bit" />
         </EntityType>
-        <Association Name="FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType">
-          <End Role="tbl_DimEquipmentType" Type="Self.tbl_DimEquipmentType" Multiplicity="0..1" />
-          <End Role="tbl_DimSiteEquipment" Type="Self.tbl_DimSiteEquipment" Multiplicity="*" />
+        <EntityType Name="tbl_factMaintenanceAnnotations">
+          <Key>
+            <PropertyRef Name="AID" />
+          </Key>
+          <Property Name="AID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UniqueID" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="WorkOrderID" Type="nvarchar" MaxLength="255" />
+          <Property Name="FailureTypeDescription" Type="nvarchar" MaxLength="255" />
+          <Property Name="FailureDescription" Type="nvarchar" MaxLength="255" />
+          <Property Name="RootCauseDescription" Type="nvarchar" MaxLength="255" />
+          <Property Name="RepairTypeDescription" Type="nvarchar" MaxLength="255" />
+          <Property Name="EquipmentType" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="EquipmentNumber" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="EquipmentName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="ModifyStamp" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="ModifyUser" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <Association Name="FK_tbl_factMaintenanceAnnotations_tbl_DimEquipmentType_EquipmentType">
+          <End Role="tbl_DimEquipmentType" Type="Self.tbl_DimEquipmentType" Multiplicity="1" />
+          <End Role="tbl_factMaintenanceAnnotations" Type="Self.tbl_factMaintenanceAnnotations" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="tbl_DimEquipmentType">
               <PropertyRef Name="EquipmentType" />
             </Principal>
-            <Dependent Role="tbl_DimSiteEquipment">
+            <Dependent Role="tbl_factMaintenanceAnnotations">
               <PropertyRef Name="EquipmentType" />
             </Dependent>
           </ReferentialConstraint>
@@ -68,9 +85,10 @@
           <EntitySet Name="tbl_DimNonWorkOrderDowntimeAnnnotations" EntityType="Self.tbl_DimNonWorkOrderDowntimeAnnnotations" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_DimSiteEquipment" EntityType="Self.tbl_DimSiteEquipment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tbl_factFailureDowntimeCMMS" EntityType="Self.tbl_factFailureDowntimeCMMS" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType" Association="Self.FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType">
+          <EntitySet Name="tbl_factMaintenanceAnnotations" EntityType="Self.tbl_factMaintenanceAnnotations" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tbl_factMaintenanceAnnotations_tbl_DimEquipmentType_EquipmentType" Association="Self.FK_tbl_factMaintenanceAnnotations_tbl_DimEquipmentType_EquipmentType">
             <End Role="tbl_DimEquipmentType" EntitySet="tbl_DimEquipmentType" />
-            <End Role="tbl_DimSiteEquipment" EntitySet="tbl_DimSiteEquipment" />
+            <End Role="tbl_factMaintenanceAnnotations" EntitySet="tbl_factMaintenanceAnnotations" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -104,18 +122,23 @@
             <End Role="tbl_DimEquipmentType" EntitySet="tbl_DimEquipmentType" />
             <End Role="tbl_DimSiteEquipment" EntitySet="tbl_DimSiteEquipment" />
           </AssociationSet>
+          <EntitySet Name="tbl_factMaintenanceAnnotations" EntityType="MOMSEventFrameInterfaceModel.tbl_factMaintenanceAnnotations" />
+          <AssociationSet Name="FK_tbl_factMaintenanceAnnotations_tbl_DimEquipmentType_EquipmentType" Association="MOMSEventFrameInterfaceModel.FK_tbl_factMaintenanceAnnotations_tbl_DimEquipmentType_EquipmentType">
+            <End Role="tbl_DimEquipmentType" EntitySet="tbl_DimEquipmentType" />
+            <End Role="tbl_factMaintenanceAnnotations" EntitySet="tbl_factMaintenanceAnnotations" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="tbl_DimSiteEquipment">
           <Key>
             <PropertyRef Name="ElementID" />
           </Key>
-          <Property Name="ElementID" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="EquipmentName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="EquipmentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="EquipmentType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Site" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SiteArea" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SiteSection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ElementID" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EquipmentName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EquipmentNumber" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EquipmentType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Site" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SiteArea" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="SiteSection" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tbl_DimEquipmentType" Relationship="MOMSEventFrameInterfaceModel.FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType" FromRole="tbl_DimSiteEquipment" ToRole="tbl_DimEquipmentType" />
         </EntityType>
         <EntityType Name="tbl_DimNonWorkOrderDowntimeAnnnotations">
@@ -131,9 +154,10 @@
           <Key>
             <PropertyRef Name="EquipmentType" />
           </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EquipmentType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EquipmentType" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="tbl_DimSiteEquipment" Relationship="MOMSEventFrameInterfaceModel.FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType" FromRole="tbl_DimEquipmentType" ToRole="tbl_DimSiteEquipment" />
+          <Property Name="EquipmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="tbl_factMaintenanceAnnotations" Relationship="MOMSEventFrameInterfaceModel.FK_tbl_factMaintenanceAnnotations_tbl_DimEquipmentType_EquipmentType" FromRole="tbl_DimEquipmentType" ToRole="tbl_factMaintenanceAnnotations" />
         </EntityType>
         <Association Name="FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType">
           <End Type="MOMSEventFrameInterfaceModel.tbl_DimEquipmentType" Role="tbl_DimEquipmentType" Multiplicity="0..1" />
@@ -143,6 +167,36 @@
               <PropertyRef Name="EquipmentType" />
             </Principal>
             <Dependent Role="tbl_DimSiteEquipment">
+              <PropertyRef Name="EquipmentType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="tbl_factMaintenanceAnnotations">
+          <Key>
+            <PropertyRef Name="AID" />
+          </Key>
+          <Property Name="AID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UniqueID" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="WorkOrderID" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FailureTypeDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FailureDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="RootCauseDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="RepairTypeDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EquipmentType" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EquipmentNumber" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EquipmentName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ModifyStamp" Type="DateTime" Nullable="false" Precision="7" />
+          <Property Name="ModifyUser" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tbl_DimEquipmentType" Relationship="MOMSEventFrameInterfaceModel.FK_tbl_factMaintenanceAnnotations_tbl_DimEquipmentType_EquipmentType" FromRole="tbl_factMaintenanceAnnotations" ToRole="tbl_DimEquipmentType" />
+        </EntityType>
+        <Association Name="FK_tbl_factMaintenanceAnnotations_tbl_DimEquipmentType_EquipmentType">
+          <End Type="MOMSEventFrameInterfaceModel.tbl_DimEquipmentType" Role="tbl_DimEquipmentType" Multiplicity="1" />
+          <End Type="MOMSEventFrameInterfaceModel.tbl_factMaintenanceAnnotations" Role="tbl_factMaintenanceAnnotations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_DimEquipmentType">
+              <PropertyRef Name="EquipmentType" />
+            </Principal>
+            <Dependent Role="tbl_factMaintenanceAnnotations">
               <PropertyRef Name="EquipmentType" />
             </Dependent>
           </ReferentialConstraint>
@@ -198,8 +252,26 @@
           <EntitySetMapping Name="tbl_DimEquipmentType">
             <EntityTypeMapping TypeName="MOMSEventFrameInterfaceModel.tbl_DimEquipmentType">
               <MappingFragment StoreEntitySet="tbl_DimEquipmentType">
+                <ScalarProperty Name="EquipmentId" ColumnName="EquipmentId" />
                 <ScalarProperty Name="EquipmentType" ColumnName="EquipmentType" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_factMaintenanceAnnotations">
+            <EntityTypeMapping TypeName="MOMSEventFrameInterfaceModel.tbl_factMaintenanceAnnotations">
+              <MappingFragment StoreEntitySet="tbl_factMaintenanceAnnotations">
+                <ScalarProperty Name="ModifyUser" ColumnName="ModifyUser" />
+                <ScalarProperty Name="ModifyStamp" ColumnName="ModifyStamp" />
+                <ScalarProperty Name="EquipmentName" ColumnName="EquipmentName" />
+                <ScalarProperty Name="EquipmentNumber" ColumnName="EquipmentNumber" />
+                <ScalarProperty Name="EquipmentType" ColumnName="EquipmentType" />
+                <ScalarProperty Name="RepairTypeDescription" ColumnName="RepairTypeDescription" />
+                <ScalarProperty Name="RootCauseDescription" ColumnName="RootCauseDescription" />
+                <ScalarProperty Name="FailureDescription" ColumnName="FailureDescription" />
+                <ScalarProperty Name="FailureTypeDescription" ColumnName="FailureTypeDescription" />
+                <ScalarProperty Name="WorkOrderID" ColumnName="WorkOrderID" />
+                <ScalarProperty Name="UniqueID" ColumnName="UniqueID" />
+                <ScalarProperty Name="AID" ColumnName="AID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

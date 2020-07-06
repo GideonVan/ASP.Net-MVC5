@@ -12,8 +12,5 @@ namespace EventFrameHandler.Models
         public EquipmentModelView equipModelView { get; set; }
 
         public EventModelView eventModelView { get; set; }
-
-        public string selectedEquipNumber { get; set; }
-
     }
 }

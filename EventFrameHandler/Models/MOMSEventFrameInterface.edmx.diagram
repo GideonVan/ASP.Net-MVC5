@@ -10,6 +10,8 @@
         <EntityTypeShape EntityType="MOMSEventFrameInterfaceModel.tbl_DimNonWorkOrderDowntimeAnnnotations" Width="2.75" PointX="4.25" PointY="0.5" />
         <EntityTypeShape EntityType="MOMSEventFrameInterfaceModel.tbl_DimEquipmentType" Width="2.125" PointX="4.25" PointY="4.75" />
         <AssociationConnector Association="MOMSEventFrameInterfaceModel.FK_tbl_DimEquipmentType_tbl_DimSiteEquipment_EquipmentType" />
+        <EntityTypeShape EntityType="MOMSEventFrameInterfaceModel.tbl_factMaintenanceAnnotations" Width="1.875" PointX="7.75" PointY="1" />
+        <AssociationConnector Association="MOMSEventFrameInterfaceModel.FK_tbl_factMaintenanceAnnotations_tbl_DimEquipmentType_EquipmentType" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

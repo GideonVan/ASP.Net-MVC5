@@ -18,12 +18,15 @@ namespace EventFrameHandler.Models
         public tbl_DimEquipmentType()
         {
             this.tbl_DimSiteEquipment = new HashSet<tbl_DimSiteEquipment>();
+            this.tbl_factMaintenanceAnnotations = new HashSet<tbl_factMaintenanceAnnotations>();
         }
     
-        public int ID { get; set; }
         public string EquipmentType { get; set; }
+        public int EquipmentId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<tbl_DimSiteEquipment> tbl_DimSiteEquipment { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<tbl_factMaintenanceAnnotations> tbl_factMaintenanceAnnotations { get; set; }
     }
 }

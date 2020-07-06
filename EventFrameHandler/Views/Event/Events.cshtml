@@ -8,55 +8,32 @@
 
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 
-@*Event Filters*@
-@*<div type="container-fluid">
-        <label for="site">@Html.DropDownListFor(x => x.Site, ViewBag.SiteList as SelectList, "--Select Site--", new { @id = "siteList", @class = "form-control" })</label>
-
-        <label for="from">From</label>
-        <input type="text" id="from" name="from" onkeydown="return false">
-
-        <label for="to">To</label>
-        <input type="text" id="to" name="to" onkeydown="return false">
-
-        <button class="btn btn-success" id="filter" onclick="GetEventsFiltered()">Apply Filter</button>
-    </div>*@
-
-
-@*<button class="btn btn-success" id="test" onclick="GetEquipmentNumberList()">Test</button>*@
-
 @*This is the table of data for new events*@
 <div class="container-fluid text-nowrap" id="NewEventsContainer" style="width:100%">
-    <table id="NewEvents" class="container-fluid table-striped table-bordered table-responsive text-nowrap" style="width:auto">
+    <table id="NewEvents" class="container-fluid table-striped table-responsive text-nowrap" style="width:auto">
         <thead>
             <tr>
-                @*<th>UniqueID</th>*@
                 <th>Equipment</th>
                 <th>Equipment Number</th>
                 <th>Start Time</th>
                 <th>End Time</th>
                 <th>Duration</th>
                 <th>Site</th>
-                <th>Annotate</th>
-                <th>Create Work Order</th>
-                <th></th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tfoot>
-            <tr>
-                @*<th>UniqueID</th>
-                <th>Equipment</th>
-                <th>Equipment Number</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Duration</th>
-                <th>Site</th>*@
-            </tr>
+
         </tfoot>
     </table>
 </div>
 
+@*Space to display annotation fields*@
+<div class="container-fluid text-nowrap table-bordered table-responsive text-nowrap" id="annotationContainer" style="width:auto">
+</div>
+
 @*Self annotation/Create Work Order window*@
-<div class="modal fade" id="myModal">
+@*<div class="modal fade" id="myModal">
     <div class="modal-dialog">
         <div class="modal-content">
 
@@ -73,16 +50,12 @@
 
             <div class="modal-footer">
 
-                @*<a href="#" class="btn btn-warning" data-dismiss="modal">Cancel</a>
-                <a href="#" class="btn btn-success" onclick="SetFirstResponderAnnotation()">Confirm</a>*@
-
             </div>
 
         </div>
 
     </div>
-
-</div>
+</div>*@
 
 @section scripts {
 
@@ -94,39 +67,11 @@
     <script src="~/Scripts/jquery-ui-1.12.1.js"></script>
     <script src="~/Scripts/moment.js"></script>
 
-    <link href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
-    <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <link href="//cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" rel="stylesheet" />
-    <script src="//cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.js"></script>
+    <link href="~/Content/DataTables/css/jquery.dataTables.min.css" rel="stylesheet" />
 
-
-    <script type="text/javascript">
-
-        function SetFirstResponderAnnotation() {
-            $.ajax({
-                type: "Post",
-                url: "/Event/SetFirstResponderAnnotation",
-                contentType:"html",
-                    success: function(response) {
-
-                    }
-            })
-        }
-        ////test function
-        //function GetEquipmentNumberList() {
-        //    debugger
-        //    $.ajax({
-        //        type: "Post",
-        //        url: "/Event/GetEquipmentNumberList?EquipmentType=" + "Conveyor",
-        //        contentType: "html",
-        //        success: function (response) {
-        //            debugger
-        //            $("#equipNumList").empty();
-        //            $("#equipNumList").append(response);
-        //        }
-        //    })
-        //}
-    </script>
+    <link href="~/Content/DataTables/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="~/Scripts/DataTables/dataTables.buttons.min.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -135,7 +80,7 @@
             //Enable all tooltips in document
             $('[data-toggle="tooltip"]').tooltip();
 
-            // Setup JQuery UI date picker format to dd/mm/yy
+            //Setup JQuery UI date picker format to dd/mm/yy
             $.datepicker.regional[""].dateFormat = 'dd/mm/yy';
             $.datepicker.setDefaults($.datepicker.regional['']);
 
@@ -147,14 +92,12 @@
                     "url": "/Event/GetEvents",
                     "datatype": "json",
                     "bServerSide": true,
-                    //"sAjaxSource": "/Events/GetEvents",
-                    //"sAjaxSource": "/Events/AjaxHandler",
                     "bProcessing": true,
                     "bFilter": true,
                 },
 
-                "rowId": function (a) {
-                    return a.uniqueID;
+                "rowId": function (data) {
+                    return data.uniqueID;
                 },
 
                 "responsive": true,
@@ -168,30 +111,19 @@
                 ],
 
                 "columns": [
-                    //{ "data": "uniqueID" },
                     { "data": "equipmentName" },
                     { "data": "equipmentNumber" },
                     {
-                        "data": "startTime", "render": function (data) {
+                        "data": "startTime",
+                        "render": function (data) {
                             if (data === null) return "";
                             var dt = moment(data).format("YYYY/MM/DD HH:mm:ss"); //json string
                             return dt;
-
-                            //var dt = new Date(parseFloat(results[1]));
-                            //var pattern = /Date\(([^)]+)\)/;
-                            //var results = pattern.exec(data);
-
-                            //return dt.getFullYear() + "/" + "0" + (dt.getMonth() + 1) + "/" + dt.getDate() + " " + dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
-
-                            //if (dt.getMonth().toString().length == 1) {
-                            //    return dt.getFullYear() + "/" + "0" + (dt.getMonth() + 1) + "/" + dt.getDate() + " " + dt.getHours() + ":" + dt.getMinutes().toPrecision(2) + ":" + dt.getSeconds().toPrecision(2);
-                            //}
-                            //return dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate();
-                            //return (dt.getMonth() + 1) + "/" + dt.getDate() + "/" + dt.getFullYear();
                         }
                     },
                     {
-                        "data": "endTime", "render": function (data) {
+                        "data": "endTime",
+                        "render": function (data) {
                             if (data === null) return "";
                             var dt = moment(data).format("YYYY/MM/DD HH:mm:ss"); //json string
                             return dt;
@@ -200,29 +132,21 @@
                     { "data": "duration" },
                     { "data": "site" },
                     {
-                        "mData": null,
-                        "bSortable": false,
-                        "mRender": function (data, type, full) {
-                            //return '<a class="btn btn-info btn-sm" id="SelfAnnotate" href=#' + full[0] + '>' + 'Self Annotate' + '</a>';
-                            return '<button><a class="glyphicon glyphicon-pencil" id="SelfAnnotate" data-toggle="modal" data-target="#myModal" title ="Self Annotate" data-title="Self Annotate" href=#></a></button>';
+                        "data": null,
+                        "sortable": false,
+                        "render": function (data, type, full) {
+                            return '<button><a class="glyphicon glyphicon-pencil" href=# id="SelfAnnotate" data-toggle="tooltip" data-placement="top" title="First Responder Annotation"></a></button> <button><a class="glyphicon glyphicon-wrench" id="CreateWorkOrder" href=# data-toggle="tooltip" data-placement="top" title="Create Work Order"></a></button>';
                         }
                     },
-                    {
-                        "mData": null,
-                        "bSortable": false,
-                        "mRender": function (data, type, full) {
-                            return '<button><a class="glyphicon glyphicon-wrench" id="CreateWorkOrder" data-toggle="modal" data-target="#myModal" title="Create Work Order" data-title="Create Work Order" href=#></a></button>';
-                        }
-                    }
-                ],
+                ]
 
                 //Remove default search datatables using DOM positioning
-                "dom": '<"top"l>rt<"bottom"ip><"clear">',
+                //"dom": '<"top"l>rt<"bottom"ip><"clear">',
 
-                //Add serach control
-                "fnInitComplete": function (oSettings, json) {
-                    addSearchControl(json)
-                }
+                //Add search control
+                //"fnInitComplete": function (oSettings, json) {
+                //    addSearchControl(json)
+                //}
             });
 
             // Setup - add a text input to each footer cell -NOT WORKING YET
@@ -250,20 +174,28 @@
 
             //Listener for when self annotation is clicked
             $('body').on('click', '#SelfAnnotate', function () {
+                //debugger
                 var row = $(this).parents('tr')[0];
                 var id = NewEventsTable.row(row).id();
+                var site = NewEventsTable.row(site).id();
+                //debugger
 
-                var $row = $(this).closest("tr"),                   // Finds the closest row <tr> 
+                var $row = $(this).closest("tr"),                   // Finds the closest row <tr>
                     $tds = $row.find("td:nth-child(6)");            // Finds the 6th <td> element
 
-                $.each($tds, function() {                           // Visits every single <td> element
+                $.each($tds, function () {                           // Visits every single <td> element
                     $site = $(this).text();                         // Prints out the text within the <td>
                 });
 
                 var url = "/Event/SetFirstResponderPartial?EventId=" + id + "&Site=" + encodeURIComponent($site);
-                $("#myModalBodyDiv").load(url, function () {
-                    $("#myModal").modal("show");
+                $("#annotationContainer").load(url, function () {
+                    //$("#myModal").modal("show");
                 });
+
+                $('html, body').animate({
+                    scrollTop: $("#annotationContainer").offset().top
+                }, 1000);
+                
             });
 
             //Listener for when create workorder is clicked
@@ -271,26 +203,17 @@
                 var row = $(this).parents('tr')[0];
                 var id = NewEventsTable.row(row).id();
 
-                var $row = $(this).closest("tr"),                   // Finds the closest row <tr> 
+                var $row = $(this).closest("tr"),                   // Finds the closest row <tr>
                     $tds = $row.find("td:nth-child(6)");            // Finds the 6th <td> element
 
-                $.each($tds, function() {                           // Visits every single <td> element
+                $.each($tds, function () {                           // Visits every single <td> element
                     $site = $(this).text();                         // Prints out the text within the <td>
                 });
 
                 var url = "/Event/SetWorkOrderPartial?EventId=" + id + "&Site=" + encodeURIComponent($site);
                 $("#myModalBodyDiv").load(url, function () {
-                    $("#myModal").modal("show");
+                    //$("#myModal").modal("show");
                 });
-            });
-
-            //dynamically set title of modal
-            $('#myModal').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget); // Button that triggered the modal
-                var modal = $(this);
-                var title = button.data('title');
-                modal.find('.modal-title').text(title);
-                //alert(title);
             });
 
             //Adjust container for new events
@@ -299,73 +222,48 @@
 
         });
     </script>
-
-
-    @*When site selection is made the event trigger filters the datatable (general filter)*@
-    <script>
-
-        $('#siteList').on("change", function () {
-            var fromSelection = $('#from option:selected').text();
-            var siteSelection = $('#siteList option:selected').text();
-            $('#NewEvents').DataTable().search(siteSelection, false, true).draw();
-        });
-    </script>
-
-    @*Date picker*@
-    <script>
-        $(document).ready(function () {
-
-            var dateFormat = "dd/mm/yy",
-                from = $("#from")
-                    .datepicker({
-                        defaultDate: "+1w",
-                        maxDate: "getDate",
-                        changeMonth: true,
-                        changeYear: true,
-                        numberOfMonths: 1
-                    })
-                    .on("change", function () {
-                        to.datepicker("option", "minDate", getDate(this));
-                    }),
-                to = $("#to").datepicker({
-                    defaultDate: "+1w",
-                    maxDate: "getDate",
-                    changeMonth: true,
-                    changeYear: true,
-                    numberOfMonths: 1
-                })
-                    .on("change", function () {
-                        from.datepicker("option", "maxDate", getDate(this));
-                    });
-
-            function getDate(element) {
-                var date;
-                try {
-                    date = $.datetimepicker.parseDate(dateFormat, element.value);
-                } catch (error) {
-                    date = null;
-                }
-
-                return date;
-            }
-        });
-    </script>
-
-    @*<script>
-            var GetEventsFiltered = function () {
-                var sTime = $("#from").val();
-                var eTime = $("#to").val();
-                var site = $("#siteList").val();
-
-                $("#NewEvents").select()
-            }
-        </script>*@
-
 }
 
+@*//dynamically set title of modal
+    //$('#myModal').on('show.bs.modal', function (event) {
+    //    var button = $(event.relatedTarget); // Button that triggered the modal
+    //    var modal = $(this);
+    //    var title = button.data('title');
+    //    modal.find('.modal-title').text(title);
+    //    alert(title);
+    //});*@
+
+@*<link href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+    <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <link href="//cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" rel="stylesheet" />
+    <script src="//cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>*@
 
 
+@*<script type="text/javascript">
 
+        function SetFirstResponderAnnotation() {
+            $.ajax({
+                type: "Post",
+                url: "/Event/SetFirstResponderAnnotation",
+                contentType:"html",
+                    success: function(response) {
 
-
+                    }
+            })
+        }
+        ////test function
+        //function GetEquipmentNumberList() {
+        //    debugger
+        //    $.ajax({
+        //        type: "Post",
+        //        url: "/Event/GetEquipmentNumberList?EquipmentType=" + "Conveyor",
+        //        contentType: "html",
+        //        success: function (response) {
+        //            debugger
+        //            $("#equipNumList").empty();
+        //            $("#equipNumList").append(response);
+        //        }
+        //    })
+        //}
+    </script>*@
 
